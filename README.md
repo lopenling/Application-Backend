@@ -13,4 +13,28 @@
   </a>
 </p>
 
-<p align="center"> The mission of <b>Lotus King Research</b> is to be a positive factor in the translation, understanding and practice of Tibetan language Dharma texts, and Tibetan language in the context of Buddhadharma.</p>
+<p align="center">
+  <a href="#description">Description</a> •
+  <a href="#owner">Owner</a> •
+  <a href="#integrations">Integrations</a> •
+  <a href="#docs">Docs</a>
+</p>
+<hr>
+
+## Description
+
+Repository for Padma's dictionary service with PSQL database and GRAPHQL API.
+
+## Owner
+
+- [@pdey](https://github.com/pdey)
+
+## Integrations
+
+- Downstream from [Padma-Dictionary-Data](https://github.com/Lotus-King-Research/Padma-Dictionary-Data)
+- Upstream from [Padma-Backend](https://github.com/Lotus-King-Research/Padma-Backend)
+
+
+## Docs
+
+[Docs](https://github.com/Lotus-King-Research/Padma-Frontend/tree/master/docs)
