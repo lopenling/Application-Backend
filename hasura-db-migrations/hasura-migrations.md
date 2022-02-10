@@ -5,6 +5,6 @@ installation of Hasura GraphQL engine on an AWS ec2 instance.
 To learn about how to manage migration with Hasura CLI tool refer to [this documentation](https://hasura.io/docs/latest/graphql/core/migrations/migrations-setup.html).
 
 ### Important things to remember
-- [Hasura CLI](https://hasura.io/docs/latest/graphql/core/hasura-cli/install-hasura-cli.html#install-hasura-cli) need to installed to work with the migration files in the current folder.
+- Install [Hasura CLI](https://hasura.io/docs/latest/graphql/core/hasura-cli/install-hasura-cli.html#install-hasura-cli)  to work with the migration files stored in the current folder.
 - Admin password required for accessing the database is intentionally not included in `config.yaml` for security purpose. Use an environment variable called `HASURA_GRAPHQL_ADMIN_SECRET` and set its value to admin password for hasura server.
 - For making any database and graphql changes, one should always use `hasura console` from the current directory, so that changes will create/update the necessary migration and metadata (for graphql) files automatically. All new/updated migration files should be committed to git and pushed to origin.
