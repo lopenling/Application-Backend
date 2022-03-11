@@ -1,0 +1,11 @@
+table:
+  name: tibetan_words
+  schema: public
+array_relationships:
+- name: descriptions
+  using:
+    foreign_key_constraint_on:
+      column: word_id
+      table:
+        name: descriptions
+        schema: public

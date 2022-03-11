@@ -1,0 +1,13 @@
+table:
+  name: descriptions
+  schema: public
+object_relationships:
+- name: word
+  using:
+    manual_configuration:
+      column_mapping:
+        word_id: id
+      insertion_order: null
+      remote_table:
+        name: tibetan_words
+        schema: public
