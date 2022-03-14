@@ -5,6 +5,15 @@
 # Requires: Hasura CLI v2.2.0 or later version.
 ##
 
+source .env
+
+# install depdencies
+pip install git+https://github.com/Lotus-King-Research/Padma-Dictionary-Lookup
+pip install tqdm
+
+# build the dictionary sql files
+python dictionaries_to_sql.py
+
 ## Container Name as specified in docker-compose.yml
 $DOCKER_CONTAINER_NAME="hasura/graphql-engine:v2.3.0"
 
@@ -18,7 +27,7 @@ sudo docker volume rm -f padma-dictionary-service_db_data;
 docker-compose up -d $DOCKER_CONTAINER_NAME
 
 ## Wait for port 8080
-sleep 2s;
+sleep 10;
 
 ## Migrate remote server setup to local dev server.
 cd hasura-db-migrations;
@@ -27,8 +36,10 @@ hasura migrate apply --all-databases --endpoint $DEV_HASURA_ENDPOINT --admin-sec
 hasura metadata reload --endpoint $DEV_HASURA_ENDPOINT --admin-secret $HASURA_GRAPHQL_ADMIN_SECRET
 cd ..;
 
-## Addiotionally load dictionary data into local database.
-cd db-seed-data;
-gunzip --keep db-data.sql.gz;
-psql -h localhost -U postgres -d postgres < db-data.sql;
-rm db-data.sql;
+CONTAINER_ID=$(docker ps | grep postgres:12 | grep padma-dictionary-service | cut -d ' ' -f1)
+
+docker exec -i $CONTAINER_ID psql -h localhost -U postgres -d postgres < words.sql;
+docker exec -i $CONTAINER_ID psql -h localhost -U postgres -d postgres < descriptions.sql;
+
+rm words.sql
+rm descriptions.sql
