@@ -88,4 +88,4 @@ def clean_up_word_ending(df, col):
     
     return df
 
-dictionaries_to_sql()
+dictionaries_to_sql(True)
