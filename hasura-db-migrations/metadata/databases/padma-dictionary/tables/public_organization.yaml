@@ -1,0 +1,63 @@
+table:
+  schema: public
+  name: organization
+object_relationships:
+  - name: admin
+    using:
+      foreign_key_constraint_on: admin_id
+array_relationships:
+  - name: teams
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          schema: public
+          name: team
+select_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - same_as_team
+        - logo
+        - name
+        - admin_id
+        - id
+      filter:
+        admin_id:
+          _eq: X-Hasura-User-Id
+  - role: team_admin
+    permission:
+      columns:
+        - same_as_team
+        - logo
+        - name
+        - admin_id
+        - id
+      filter:
+        teams:
+          admin_id:
+            _eq: X-Hasura-User-Id
+  - role: translator
+    permission:
+      columns:
+        - same_as_team
+        - logo
+        - name
+        - admin_id
+        - id
+      filter:
+        teams:
+          team_members:
+            user_id:
+              _eq: X-Hasura-User-Id
+update_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - logo
+        - name
+        - same_as_team
+      filter:
+        admin_id:
+          _eq: X-Hasura-User-Id
+      check: null

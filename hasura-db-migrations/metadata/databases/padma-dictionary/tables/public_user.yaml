@@ -1,0 +1,95 @@
+table:
+  schema: public
+  name: user
+array_relationships:
+  - name: organization_members
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: organization_member
+  - name: teams
+    using:
+      foreign_key_constraint_on:
+        column: admin_id
+        table:
+          schema: public
+          name: team
+insert_permissions:
+  - role: org_admin
+    permission:
+      check:
+        teams:
+          organization:
+            admin_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - email
+        - name
+  - role: team_admin
+    permission:
+      check:
+        teams:
+          admin_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - email
+        - name
+select_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - email
+        - id
+        - name
+      filter:
+        teams:
+          organization:
+            admin_id:
+              _eq: X-Hasura-User-Id
+  - role: team_admin
+    permission:
+      columns:
+        - email
+        - id
+        - name
+      filter:
+        teams:
+          admin_id:
+            _eq: X-Hasura-User-Id
+  - role: translator
+    permission:
+      columns:
+        - id
+        - name
+      filter:
+        teams:
+          team_members:
+            user_id:
+              _eq: X-Hasura-User-Id
+update_permissions:
+  - role: translator
+    permission:
+      columns:
+        - name
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: org_admin
+    permission:
+      backend_only: false
+      filter:
+        teams:
+          organization:
+            admin_id:
+              _eq: X-Hasura-User-Id
+  - role: team_admin
+    permission:
+      backend_only: false
+      filter:
+        teams:
+          admin_id:
+            _eq: X-Hasura-User-Id

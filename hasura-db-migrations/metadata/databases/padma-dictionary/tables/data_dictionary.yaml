@@ -1,0 +1,74 @@
+table:
+  schema: data
+  name: dictionary
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+array_relationships:
+  - name: dictionary_permissions
+    using:
+      foreign_key_constraint_on:
+        column: dictionary_id
+        table:
+          schema: public
+          name: dictionary_permission
+insert_permissions:
+  - role: org_admin
+    permission:
+      check: {}
+      set:
+        organization_id: x-hasura-Org-Id
+      columns:
+        - access_mode
+        - name
+select_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - access_mode
+        - name
+        - id
+        - organization_id
+      filter:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id
+  - role: team_admin
+    permission:
+      columns:
+        - access_mode
+        - name
+        - id
+        - organization_id
+      filter:
+        organization:
+          teams:
+            admin_id:
+              _eq: X-Hasura-User-Id
+  - role: translator
+    permission:
+      columns:
+        - access_mode
+        - name
+        - id
+        - organization_id
+      filter:
+        organization:
+          teams:
+            team_members:
+              user_id:
+                _eq: X-Hasura-User-Id
+update_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - access_mode
+        - name
+      filter: {}
+      check: null
+delete_permissions:
+  - role: org_admin
+    permission:
+      backend_only: false
+      filter: {}

@@ -1,0 +1,22 @@
+table:
+  schema: data
+  name: word_assoication_type
+select_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - comment
+        - value
+      filter: {}
+  - role: team_admin
+    permission:
+      columns:
+        - comment
+        - value
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+        - comment
+        - value
+      filter: {}

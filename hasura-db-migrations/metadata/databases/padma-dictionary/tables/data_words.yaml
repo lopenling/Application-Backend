@@ -1,0 +1,59 @@
+table:
+  schema: data
+  name: words
+array_relationships:
+  - name: descriptions
+    using:
+      foreign_key_constraint_on:
+        column: word_id
+        table:
+          schema: data
+          name: descriptions
+insert_permissions:
+  - role: org_admin
+    permission:
+      check: {}
+      columns:
+        - word
+  - role: team_admin
+    permission:
+      check: {}
+      columns:
+        - word
+  - role: translator
+    permission:
+      check: {}
+      columns:
+        - word
+select_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - id
+        - word
+      filter: {}
+  - role: team_admin
+    permission:
+      columns:
+        - id
+        - word
+      filter: {}
+  - role: translator
+    permission:
+      columns:
+        - id
+        - word
+      filter: {}
+update_permissions:
+  - role: org_admin
+    permission:
+      columns:
+        - word
+      filter: {}
+      check: null
+  - role: team_admin
+    permission:
+      columns:
+        - word
+      filter: {}
+      check: null
