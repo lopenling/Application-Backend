@@ -1,6 +1,6 @@
 table:
-  schema: data
   name: access_mode
+  schema: data
 select_permissions:
   - role: org_admin
     permission:

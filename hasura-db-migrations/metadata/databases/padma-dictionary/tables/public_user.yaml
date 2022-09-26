@@ -1,21 +1,21 @@
 table:
-  schema: public
   name: user
+  schema: public
 array_relationships:
   - name: organization_members
     using:
       foreign_key_constraint_on:
         column: user_id
         table:
-          schema: public
           name: organization_member
+          schema: public
   - name: teams
     using:
       foreign_key_constraint_on:
         column: admin_id
         table:
-          schema: public
           name: team
+          schema: public
 insert_permissions:
   - role: org_admin
     permission:

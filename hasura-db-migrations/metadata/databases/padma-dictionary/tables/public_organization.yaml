@@ -1,18 +1,25 @@
 table:
-  schema: public
   name: organization
+  schema: public
 object_relationships:
   - name: admin
     using:
       foreign_key_constraint_on: admin_id
 array_relationships:
+  - name: organization_members
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          name: organization_member
+          schema: public
   - name: teams
     using:
       foreign_key_constraint_on:
         column: organization_id
         table:
-          schema: public
           name: team
+          schema: public
 select_permissions:
   - role: org_admin
     permission:

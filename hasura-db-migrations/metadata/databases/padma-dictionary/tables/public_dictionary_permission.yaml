@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: dictionary_permission
+  schema: public
 object_relationships:
   - name: dictionary
     using:

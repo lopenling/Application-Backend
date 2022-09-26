@@ -1,6 +1,6 @@
 table:
-  schema: data
   name: word_assoication_type
+  schema: data
 select_permissions:
   - role: org_admin
     permission:

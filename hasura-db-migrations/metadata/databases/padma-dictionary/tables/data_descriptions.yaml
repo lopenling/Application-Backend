@@ -1,6 +1,6 @@
 table:
-  schema: data
   name: descriptions
+  schema: data
 object_relationships:
   - name: dictionary
     using:

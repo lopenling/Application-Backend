@@ -1,14 +1,14 @@
 table:
-  schema: data
   name: words
+  schema: data
 array_relationships:
   - name: descriptions
     using:
       foreign_key_constraint_on:
         column: word_id
         table:
-          schema: data
           name: descriptions
+          schema: data
 insert_permissions:
   - role: org_admin
     permission:

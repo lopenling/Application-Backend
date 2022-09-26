@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: team
+  schema: public
 object_relationships:
   - name: admin
     using:
@@ -14,8 +14,8 @@ array_relationships:
       foreign_key_constraint_on:
         column: team_id
         table:
-          schema: public
           name: team_member
+          schema: public
 insert_permissions:
   - role: org_admin
     permission:

@@ -1,6 +1,6 @@
 table:
-  schema: data
   name: dictionary
+  schema: data
 object_relationships:
   - name: organization
     using:
@@ -11,8 +11,8 @@ array_relationships:
       foreign_key_constraint_on:
         column: dictionary_id
         table:
-          schema: public
           name: dictionary_permission
+          schema: public
 insert_permissions:
   - role: org_admin
     permission:
