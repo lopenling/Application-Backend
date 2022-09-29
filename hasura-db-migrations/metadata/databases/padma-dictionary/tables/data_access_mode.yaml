@@ -1,6 +1,7 @@
 table:
   name: access_mode
   schema: data
+is_enum: true
 select_permissions:
   - role: org_admin
     permission:
