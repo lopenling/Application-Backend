@@ -12,9 +12,14 @@ insert_permissions:
   - role: user
     permission:
       check:
-        team:
-          admin_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - team:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - team:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
       columns:
         - team_id
         - user_id
@@ -38,15 +43,25 @@ update_permissions:
       columns:
         - user_id
       filter:
-        team:
-          admin_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - team:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - team:
+              admin_id:
+                _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
   - role: user
     permission:
       backend_only: false
       filter:
-        team:
-          admin_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - team:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - team:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id

@@ -27,6 +27,7 @@ insert_permissions:
         - admin_id
         - logo
         - name
+        - organization_id
 select_permissions:
   - role: user
     permission:

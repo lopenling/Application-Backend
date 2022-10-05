@@ -9,17 +9,16 @@ object_relationships:
     using:
       foreign_key_constraint_on: user_id
 insert_permissions:
-  - role: org_admin
+  - role: user
     permission:
       check:
         organization:
           admin_id:
             _eq: X-Hasura-User-Id
       columns:
-        - organization_id
         - user_id
 select_permissions:
-  - role: org_admin
+  - role: user
     permission:
       columns:
         - organization_id
@@ -28,28 +27,18 @@ select_permissions:
         organization:
           admin_id:
             _eq: X-Hasura-User-Id
-  - role: team_admin
+update_permissions:
+  - role: user
     permission:
       columns:
-        - organization_id
         - user_id
       filter:
         organization:
-          teams:
-            admin_id:
-              _eq: X-Hasura-User-Id
-  - role: translator
-    permission:
-      columns:
-        - organization_id
-        - user_id
-      filter:
-        user:
-          organization_members:
-            user_id:
-              _eq: X-Hasura-User-Id
+          admin_id:
+            _eq: X-Hasura-User-Id
+      check: null
 delete_permissions:
-  - role: org_admin
+  - role: user
     permission:
       backend_only: false
       filter:

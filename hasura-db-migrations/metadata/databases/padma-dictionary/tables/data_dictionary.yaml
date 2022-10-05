@@ -13,3 +13,56 @@ array_relationships:
         table:
           name: dictionary_permission
           schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - access_mode
+        - name
+        - organization_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - access_mode
+        - id
+        - name
+        - organization_id
+      filter:
+        _or:
+          - organization:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - dictionary_permissions:
+              team:
+                team_members:
+                  user_id:
+                    _eq: X-Hasura-User-Id
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - access_mode
+        - name
+      filter:
+        _or:
+          - organization:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - organization:
+              teams:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      backend_only: false
+      filter:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id
