@@ -27,10 +27,17 @@ select_permissions:
         - id
         - team_id
       filter:
-        dictionary:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
+        _or:
+          - dictionary:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - dictionary:
+              organization:
+                teams:
+                  team_members:
+                    user_id:
+                      _eq: X-Hasura-User-Id
 update_permissions:
   - role: user
     permission:

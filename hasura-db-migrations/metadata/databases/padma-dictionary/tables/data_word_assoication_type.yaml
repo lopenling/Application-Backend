@@ -1,20 +1,9 @@
 table:
   name: word_assoication_type
   schema: data
+is_enum: true
 select_permissions:
-  - role: org_admin
-    permission:
-      columns:
-        - comment
-        - value
-      filter: {}
-  - role: team_admin
-    permission:
-      columns:
-        - comment
-        - value
-      filter: {}
-  - role: translator
+  - role: user
     permission:
       columns:
         - comment

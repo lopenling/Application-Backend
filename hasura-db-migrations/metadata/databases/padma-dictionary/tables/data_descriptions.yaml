@@ -12,149 +12,71 @@ object_relationships:
     using:
       foreign_key_constraint_on: word_id
 insert_permissions:
-  - role: org_admin
+  - role: user
     permission:
       check:
-        dictionary:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
-      set:
-        last_updated_by: x-hasura-User-Id
+        _or:
+          - dictionary:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - dictionary:
+              dictionary_permissions:
+                team:
+                  team_members:
+                    user_id:
+                      _eq: X-Hasura-User-Id
       columns:
         - description
         - dictionary_id
+        - last_updated_by
         - updated_at
         - word_id
-  - role: team_admin
-    permission:
-      check:
-        dictionary:
-          dictionary_permissions:
-            team:
-              admin_id:
-                _eq: X-Hasura-User-Id
-      set:
-        last_updated_by: x-hasura-User-Id
-      columns:
-        - description
-        - dictionary_id
-        - updated_at
-  - role: translator
-    permission:
-      check:
-        dictionary:
-          dictionary_permissions:
-            team:
-              team_members:
-                user_id:
-                  _eq: X-Hasura-User-Id
-      set:
-        last_updated_by: x-hasura-User-Id
-      columns:
-        - description
 select_permissions:
-  - role: org_admin
+  - role: user
     permission:
       columns:
-        - id
-        - word_id
         - description
-        - updated_at
         - dictionary_id
-        - last_updated_by
-      filter:
-        dictionary:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
-  - role: team_admin
-    permission:
-      columns:
         - id
-        - word_id
-        - description
-        - updated_at
-        - dictionary_id
         - last_updated_by
-      filter:
-        dictionary:
-          organization:
-            teams:
-              admin_id:
-                _eq: X-Hasura-User-Id
-  - role: translator
-    permission:
-      columns:
-        - id
-        - word_id
-        - description
         - updated_at
-        - dictionary_id
-        - last_updated_by
-      filter:
-        dictionary:
-          organization:
-            teams:
-              team_members:
-                user_id:
-                  _eq: X-Hasura-User-Id
+        - word_id
+      filter: {}
 update_permissions:
-  - role: org_admin
+  - role: user
     permission:
       columns:
         - description
+        - dictionary_id
+        - last_updated_by
         - updated_at
+        - word_id
       filter:
-        dictionary:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
-      check: null
-      set:
-        last_updated_by: x-hasura-User-Id
-  - role: team_admin
-    permission:
-      columns:
-        - description
-      filter:
-        dictionary:
-          dictionary_permissions:
-            team:
-              admin_id:
-                _eq: X-Hasura-User-Id
-      check: null
-      set:
-        last_updated_by: x-hasura-User-Id
-  - role: translator
-    permission:
-      columns:
-        - description
-      filter:
-        dictionary:
-          dictionary_permissions:
-            team:
-              team_members:
-                user_id:
+        _or:
+          - dictionary:
+              organization:
+                admin_id:
                   _eq: X-Hasura-User-Id
+          - dictionary:
+              dictionary_permissions:
+                team:
+                  team_members:
+                    user_id:
+                      _eq: X-Hasura-User-Id
       check: null
-      set:
-        last_updated_by: x-hasura-User-Id
 delete_permissions:
-  - role: org_admin
+  - role: user
     permission:
       backend_only: false
       filter:
-        dictionary:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
-  - role: team_admin
-    permission:
-      backend_only: false
-      filter:
-        dictionary:
-          dictionary_permissions:
-            team:
-              admin_id:
-                _eq: X-Hasura-User-Id
+        _or:
+          - dictionary:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - dictionary:
+              dictionary_permissions:
+                team:
+                  admin_id:
+                    _eq: X-Hasura-User-Id

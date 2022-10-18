@@ -1,13 +1,35 @@
 table:
   name: user
   schema: public
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on:
+        column: admin_id
+        table:
+          name: organization
+          schema: public
 array_relationships:
+  - name: descriptions
+    using:
+      foreign_key_constraint_on:
+        column: last_updated_by
+        table:
+          name: descriptions
+          schema: data
   - name: organization_members
     using:
       foreign_key_constraint_on:
         column: user_id
         table:
           name: organization_member
+          schema: public
+  - name: team_members
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: team_member
           schema: public
   - name: teams
     using:
@@ -17,79 +39,30 @@ array_relationships:
           name: team
           schema: public
 insert_permissions:
-  - role: org_admin
+  - role: user
     permission:
-      check:
-        teams:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
+      check: {}
       columns:
-        - email
-        - name
-  - role: team_admin
-    permission:
-      check:
-        teams:
-          admin_id:
-            _eq: X-Hasura-User-Id
-      columns:
+        - auth_id
         - email
         - name
 select_permissions:
-  - role: org_admin
+  - role: user
     permission:
       columns:
+        - auth_id
         - email
         - id
         - name
-      filter:
-        teams:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
-  - role: team_admin
-    permission:
-      columns:
-        - email
-        - id
-        - name
-      filter:
-        teams:
-          admin_id:
-            _eq: X-Hasura-User-Id
-  - role: translator
-    permission:
-      columns:
-        - id
-        - name
-      filter:
-        teams:
-          team_members:
-            user_id:
-              _eq: X-Hasura-User-Id
+      filter: {}
 update_permissions:
-  - role: translator
+  - role: user
     permission:
       columns:
+        - auth_id
+        - email
         - name
       filter:
         id:
           _eq: X-Hasura-User-Id
       check: null
-delete_permissions:
-  - role: org_admin
-    permission:
-      backend_only: false
-      filter:
-        teams:
-          organization:
-            admin_id:
-              _eq: X-Hasura-User-Id
-  - role: team_admin
-    permission:
-      backend_only: false
-      filter:
-        teams:
-          admin_id:
-            _eq: X-Hasura-User-Id

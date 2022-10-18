@@ -16,6 +16,7 @@ insert_permissions:
           admin_id:
             _eq: X-Hasura-User-Id
       columns:
+        - organization_id
         - user_id
 select_permissions:
   - role: user
@@ -24,9 +25,17 @@ select_permissions:
         - organization_id
         - user_id
       filter:
-        organization:
-          admin_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - organization:
+              organization_members:
+                user_id:
+                  _eq: X-Hasura-User-Id
+      allow_aggregations: true
 update_permissions:
   - role: user
     permission:

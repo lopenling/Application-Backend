@@ -9,6 +9,13 @@ object_relationships:
     using:
       foreign_key_constraint_on: organization_id
 array_relationships:
+  - name: dictionary_permission
+    using:
+      foreign_key_constraint_on:
+        column: team_id
+        table:
+          name: dictionary_permission
+          schema: public
   - name: team_members
     using:
       foreign_key_constraint_on:
@@ -32,9 +39,26 @@ select_permissions:
   - role: user
     permission:
       columns:
+        - admin_id
+        - id
         - logo
         - name
         - organization_id
+      filter:
+        _or:
+          - organization:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - team_members:
+              user_id:
+                _eq: X-Hasura-User-Id
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - admin_id
+        - logo
+        - name
       filter:
         _or:
           - organization:
@@ -45,17 +69,6 @@ select_permissions:
                 team_members:
                   user_id:
                     _eq: X-Hasura-User-Id
-update_permissions:
-  - role: user
-    permission:
-      columns:
-        - admin_id
-        - logo
-        - name
-      filter:
-        organization:
-          admin_id:
-            _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
   - role: user

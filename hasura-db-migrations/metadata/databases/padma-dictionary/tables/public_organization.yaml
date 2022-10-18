@@ -6,6 +6,13 @@ object_relationships:
     using:
       foreign_key_constraint_on: admin_id
 array_relationships:
+  - name: dictionaries
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          name: dictionary
+          schema: data
   - name: organization_members
     using:
       foreign_key_constraint_on:
@@ -40,8 +47,17 @@ select_permissions:
         - admin_id
         - id
       filter:
-        admin_id:
-          _eq: X-Hasura-User-Id
+        _or:
+          - admin_id:
+              _eq: X-Hasura-User-Id
+          - organization_members:
+              user_id:
+                _eq: X-Hasura-User-Id
+          - teams:
+              team_members:
+                user_id:
+                  _eq: X-Hasura-User-Id
+      allow_aggregations: true
 update_permissions:
   - role: user
     permission:
