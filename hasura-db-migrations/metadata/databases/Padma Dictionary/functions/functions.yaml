@@ -1,1 +1,2 @@
+- "!include public_full_search_words.yaml"
 - "!include public_fuzzy_search_words.yaml"
