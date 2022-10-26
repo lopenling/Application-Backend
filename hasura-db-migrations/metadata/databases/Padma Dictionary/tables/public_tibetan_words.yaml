@@ -1,11 +1,11 @@
 table:
-  name: tibetan_words
   schema: public
+  name: tibetan_words
 array_relationships:
-- name: descriptions
-  using:
-    foreign_key_constraint_on:
-      column: word_id
-      table:
-        name: descriptions
-        schema: public
+  - name: descriptions
+    using:
+      foreign_key_constraint_on:
+        column: word_id
+        table:
+          schema: public
+          name: descriptions

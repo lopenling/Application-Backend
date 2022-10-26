@@ -7,7 +7,7 @@ pip install git+https://github.com/Lotus-King-Research/Padma-Dictionary-Lookup
 pip install tqdm
 
 # build the dictionary sql files
-python ../dictionaries-etl/dictionaries_to_sql.py
+python3 ../dictionaries-etl/dictionaries_to_sql.py
 
 ## Container Name as specified in docker-compose.yml
 $DOCKER_CONTAINER_NAME="hasura/graphql-engine:v2.3.0"
