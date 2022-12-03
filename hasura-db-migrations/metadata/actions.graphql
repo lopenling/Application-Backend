@@ -1,0 +1,28 @@
+type Query {
+  addDictionaryAPI(
+    organization_id: uuid!
+    dictionary_name: [String]
+    access_mode: String
+  ): AddDictionaryAPIOutput
+}
+
+type results {
+  result: json!
+}
+
+type dictionary {
+  result: json!
+}
+
+type SampleOutput {
+  result: json!
+}
+
+type AddDictionaryAPIOutput {
+  id: json!
+}
+
+type AddDOutput {
+  id: Int!
+}
+

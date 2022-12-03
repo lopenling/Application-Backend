@@ -1,6 +1,15 @@
-actions: []
+actions:
+  - name: addDictionaryAPI
+    definition:
+      kind: ""
+      handler: https://02d9-2409-4056-e3d-705f-699e-fa49-cb4a-5025.ngrok.io/addDictionaryAPI
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+    - name: results
+    - name: dictionary
+    - name: SampleOutput
+    - name: AddDictionaryAPIOutput
+    - name: AddDOutput
   scalars: []
