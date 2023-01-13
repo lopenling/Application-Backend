@@ -1,0 +1,4 @@
+table:
+  name: language
+  schema: data
+is_enum: true

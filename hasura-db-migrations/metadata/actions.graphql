@@ -1,9 +1,15 @@
 type Query {
   addDictionaryAPI(
-    organization_id: uuid!
-    dictionary_name: [String]
-    access_mode: String
+    dictionary: DictionaryObj!
   ): AddDictionaryAPIOutput
+}
+
+input DictionaryObj {
+  name: String!
+  target: String!
+  source: String!
+  access_mode: String!
+  organization_id: uuid!
 }
 
 type results {
@@ -19,7 +25,7 @@ type SampleOutput {
 }
 
 type AddDictionaryAPIOutput {
-  id: json!
+  dictionary_id: json!
 }
 
 type AddDOutput {
