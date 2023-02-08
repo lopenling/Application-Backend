@@ -39,6 +39,7 @@ select_permissions:
         - description
         - dictionary_id
         - id
+        - language
         - last_updated_by
         - updated_at
         - word_id

@@ -39,6 +39,8 @@ select_permissions:
         - id
         - name
         - organization_id
+        - source
+        - target
       filter:
         _or:
           - organization:

@@ -2,8 +2,10 @@ actions:
   - name: addDictionaryAPI
     definition:
       kind: ""
-      handler: https://d511-2409-4056-ebf-7abe-2375-c82d-f374-1451.ngrok.io/addDictionaryAPI
-      timeout: 500000
+      handler: https://b6f4-2401-4900-5d28-b590-94f4-33d3-ffa8-bd89.ngrok.io/addDictionaryAPI
+      timeout: 50000
+    permissions:
+      - role: user
 custom_types:
   enums: []
   input_objects:

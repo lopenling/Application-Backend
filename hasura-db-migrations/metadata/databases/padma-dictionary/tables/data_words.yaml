@@ -44,6 +44,7 @@ select_permissions:
     permission:
       columns:
         - id
+        - language
         - word
       filter: {}
 update_permissions:
