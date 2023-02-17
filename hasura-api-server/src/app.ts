@@ -4,13 +4,13 @@ import bodyParser from 'body-parser';
 
 import ReadDictionary from "./dictionary_services";
 import { 
-  hasuraDataFormat, 
-  dictionaryDataFormat, 
+  hasuraDataFormat,
   sessionVariableFormat, 
   wordDescriptionFormat 
 } from "./interface";
 
 import { 
+  getDictionary,
   addDictionary,
   addWordDescriptions
 } from "./graphql_services";
@@ -35,14 +35,36 @@ app.post("/addDictionaryAPI", async (req, res) => {
   const session: sessionVariableFormat  = req.body.session_variables;
   let hasura_input_data: hasuraDataFormat = dictionary;
   let dictionary_id:string | number = "";
+  let addDictionaryPermission: boolean = false;
   let last_updated_by = session['x-hasura-user-id'];
-
   try {
 
     const d = new ReadDictionary(hasura_input_data)
-    let dictionary_data: dictionaryDataFormat = await d.getDictionaryList();
+    let {dictionary_data, isError} = await d.getDictionaryList();
 
-    if (dictionary_data !== undefined) {
+    //on failure
+    if(isError) {
+      return res.json({
+        result: "[Error] : Error Fetching Dictionary"
+      })
+    }
+    //check if dictionary is already available in database
+    const { data , error} = await getDictionary(dictionary.name, session);
+    //on success
+    if(data) {
+      // on dictionary available
+      if(data.data.data_dictionary.length > 0) {
+        addDictionaryPermission = false;
+        return res.json({
+          result: "Dictionary is already Exist in database"
+        })
+      } else {
+        addDictionaryPermission = true;
+      }
+      
+    }
+
+    if (dictionary_data !== undefined && addDictionaryPermission ) {
 
       //create dictionary 
       const { data , error} = await addDictionary(hasura_input_data, session);
@@ -50,7 +72,8 @@ app.post("/addDictionaryAPI", async (req, res) => {
 
        //insert words and descriptions
       if(dictionary_id !== "") {
-        dictionary_data[dictionary.name].forEach( async(o) => {
+
+        dictionary_data[dictionary.name].forEach( async(o:any) => {
 
           let words: wordDescriptionFormat = {
             word : o.Tibetan,
@@ -61,17 +84,17 @@ app.post("/addDictionaryAPI", async (req, res) => {
             des_language: hasura_input_data.target
           };
 
-          const { data , error} = await addWordDescriptions( words, session);
+          const { data } = await addWordDescriptions( words, session);
         });
       }
 
       return res.json({
-        dictionary_id
+        result: {dictionary_id}
       })
 
     } else {
       return res.json({
-        dictionary_id : ` Dictionary : "${hasura_input_data.name}" is not found`
+        result: ` Dictionary : '${hasura_input_data.name}' not found`
       })
     }
     

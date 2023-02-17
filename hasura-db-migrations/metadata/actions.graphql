@@ -25,7 +25,7 @@ type SampleOutput {
 }
 
 type AddDictionaryAPIOutput {
-  dictionary_id: json!
+  result: json!
 }
 
 type AddDOutput {

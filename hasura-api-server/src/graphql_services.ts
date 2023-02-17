@@ -14,6 +14,28 @@ function createGqlClient(session : sessionVariableFormat) {
     return gqlClient;
   }
 
+  async function getDictionary(name:string, session: sessionVariableFormat): Promise<any> {
+    let body = {
+        query: `query getUserDictionary($name:String!) {
+          data_dictionary(where: {name: {_eq: $name}}) {access_mode
+            name
+            access_mode
+            target
+            source
+            organization_id
+          }
+        }              
+        `,
+        variables: {
+          name
+        }
+      }
+      
+    let data = await createGqlClient(session).post('', body);
+
+    return data;
+  };
+
   async function addDictionary(variables: hasuraDataFormat, session: sessionVariableFormat): Promise<any> {
     let body = {
         query: `mutation addDictionaryAPI($organization_id: uuid!, $name: String!, $source : data_language_enum!, $target: data_language_enum $access_mode: data_access_mode_enum!) {
@@ -53,6 +75,7 @@ function createGqlClient(session : sessionVariableFormat) {
 
 
   export {
+    getDictionary,
     addDictionary, 
     addWordDescriptions
   }

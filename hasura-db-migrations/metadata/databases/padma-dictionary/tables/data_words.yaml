@@ -38,6 +38,7 @@ insert_permissions:
                     user_id:
                       _eq: X-Hasura-User-Id
       columns:
+        - language
         - word
 select_permissions:
   - role: user

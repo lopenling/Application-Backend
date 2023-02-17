@@ -10,7 +10,7 @@ class ReadDictionary {
         public dictionary: hasuraDataFormat
     ) {}
     
-    async getDictionaryList():Promise<any> {
+    async getDictionaryList():Promise<{dictionary_data:any, isError: boolean}> {
 
         try {
 
@@ -19,6 +19,7 @@ class ReadDictionary {
             let dictionary_data;
             let selected_dictionaries: unknown[] = [];
             let dictionary_column: string[] = ["Name", "Title", "Label"]
+            let isError: boolean = false;
 
             let available_dictionaries = await danfo.readCSV(`${repo_path}${file_path}`);
 
@@ -37,13 +38,16 @@ class ReadDictionary {
 
                 //reading dictionaries from dictionaryLookup
                 const dictionaryLookup = new DictionaryLookup(dfJsonValue)
-                dictionary_data = await dictionaryLookup.loadDictionary()
+               let {dictionary, isErrDictionaryLookup}= await dictionaryLookup.loadDictionary()
+               dictionary_data = dictionary;
+               isError = isErrDictionaryLookup
             } 
-            return dictionary_data;
+            return {dictionary_data, isError};
             
 
-        } catch (err) {
-            console.log("(Error) : ", err);
+        } catch (err:any) {
+            console.log("DictionaryLookup API Error : ", err.message)
+           return {dictionary_data: {}, isError: true };
         } 
 
     }

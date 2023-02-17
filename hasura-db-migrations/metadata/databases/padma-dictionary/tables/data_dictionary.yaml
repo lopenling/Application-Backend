@@ -31,6 +31,8 @@ insert_permissions:
         - access_mode
         - name
         - organization_id
+        - source
+        - target
 select_permissions:
   - role: user
     permission:

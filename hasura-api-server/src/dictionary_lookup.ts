@@ -9,13 +9,13 @@ class DictionaryLookup {
         readonly selected_dictionary: dictionaryColFormat[],
     ) {}
     
-    async loadDictionary():Promise<any> {
+    async loadDictionary():Promise<{dictionary: dictionaryDataFormat, isErrDictionaryLookup: boolean}> {
         try {
             const base_url = 'https://raw.githubusercontent.com/Lotus-King-Research/Padma-Dictionary-Data/main/data/'
             const options: object = {
                 delimiter: '\t'
             }
-            let dictionaries: dictionaryDataFormat = {};
+            let dictionary: dictionaryDataFormat = {};
             let df_to_json:object;
             let dfJson_value:dictionaryContentFormat[];
 
@@ -25,13 +25,13 @@ class DictionaryLookup {
                 let df: DataFrame = await danfo.readCSV(`${base_url}${row['Name']}`, options)
                 df_to_json = {...danfo.toJSON(df)}
                 dfJson_value = Object.values(df_to_json)
-                dictionaries[`${row.Title}`]= dfJson_value
-                console.log(row['Title'], "downloaded")
+                dictionary[`${row.Title}`]= dfJson_value
+                console.log(row['Title'], "download completed")
 
             }
-            return dictionaries;
+            return {dictionary, isErrDictionaryLookup: false};
         } catch (err) {
-            console.log("error : ", err)
+            return {dictionary: {}, isErrDictionaryLookup: true}
         }
         
     }
