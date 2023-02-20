@@ -18,7 +18,7 @@
   <a href="#owner">Owner</a> •
   <a href="#integrations">Integrations</a> •
   <a href="#docs">Docs</a> •
-  <a href="#hasura">Hasura GraphQL APIs </a>
+  <a href="#hasura">Hasura Nodejs server </a>
 </p>
 <hr>
 
@@ -43,8 +43,20 @@ Repository for Padma's dictionary service with PSQL database and GRAPHQL API.
 
 <hr>
 
-## Hasura GraphQL APIs
+## Hasura-Nodejs server
 
+__Note__ - the instructions below use yarn but work just as well with npm
+### Project setup 
+From __*hasura-api-server*__ folder : Do the following
+```yarn install``` or ```npm install```
+### Env Variables
+```PORT=3000```
+```WEBADMIN_GRAPHQL_ENDPOINT=```
+```WEBADMIN_GRAPHQL_ADMIN_SECRET=```
+
+
+### Hasura GraphQL APIs
+GraphQL Queries and Mutations along with their Documentations:
 - [Postman Collection:  Hasura GraphQL API](https://universal-water-877432.postman.co/workspace/Team-Workspace~9d59b87a-bee9-4a1e-8392-f2982f4175a6/collection/23450657-a3c0bc96-95d9-4f08-84dc-da9d5b74c1b9?ctx=documentation)
 
   - [Dictionary-Service-API](https://universal-water-877432.postman.co/workspace/Team-Workspace~9d59b87a-bee9-4a1e-8392-f2982f4175a6/folder/23450657-52e22cfd-068f-4818-8f79-2bb380202e95?ctx=documentation)
