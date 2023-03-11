@@ -52,6 +52,7 @@ update_permissions:
   - role: user
     permission:
       columns:
+        - language
         - word
       filter:
         _or:

@@ -41,33 +41,30 @@ app.post("/addDictionaryAPI", async (req, res) => {
 
     const d = new ReadDictionary(hasura_input_data)
     let {dictionary_data, isError} = await d.getDictionaryList();
-
     //on failure
     if(isError) {
-      return res.json({
-        result: "[Error] : Error Fetching Dictionary"
+      return res.status(400).json({
+        message: dictionary_data.message
       })
     }
     //check if dictionary is already available in database
-    const { data , error} = await getDictionary(dictionary.name, session);
+    const { data } = await getDictionary(dictionary.name, session);
     //on success
     if(data) {
       // on dictionary available
       if(data.data.data_dictionary.length > 0) {
         addDictionaryPermission = false;
-        return res.json({
-          result: "Dictionary is already Exist in database"
+        return res.status(400).json({
+          message: "Dictionary is already exist"
         })
       } else {
         addDictionaryPermission = true;
       }
-      
     }
-
     if (dictionary_data !== undefined && addDictionaryPermission ) {
 
       //create dictionary 
-      const { data , error} = await addDictionary(hasura_input_data, session);
+      const { data } = await addDictionary(hasura_input_data, session);
       dictionary_id = data.data.insert_data_dictionary.returning[0].id;
 
        //insert words and descriptions
@@ -87,14 +84,14 @@ app.post("/addDictionaryAPI", async (req, res) => {
           const { data } = await addWordDescriptions( words, session);
         });
       }
-
+      
       return res.json({
         result: {dictionary_id}
       })
 
     } else {
-      return res.json({
-        result: ` Dictionary : '${hasura_input_data.name}' not found`
+      return res.status(400).json({
+        message: ` Dictionary '${hasura_input_data.name}' not found`
       })
     }
     

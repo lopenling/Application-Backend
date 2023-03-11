@@ -51,6 +51,7 @@ update_permissions:
       columns:
         - description
         - dictionary_id
+        - language
         - last_updated_by
         - updated_at
         - word_id

@@ -30,8 +30,8 @@ class DictionaryLookup {
 
             }
             return {dictionary, isErrDictionaryLookup: false};
-        } catch (err) {
-            return {dictionary: {}, isErrDictionaryLookup: true}
+        } catch (err: any) {
+            return {dictionary: err, isErrDictionaryLookup: true}
         }
         
     }

@@ -47,7 +47,7 @@ class ReadDictionary {
 
         } catch (err:any) {
             console.log("DictionaryLookup API Error : ", err.message)
-           return {dictionary_data: {}, isError: true };
+           return {dictionary_data: err, isError: true };
         } 
 
     }
