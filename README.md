@@ -379,7 +379,28 @@ To use __hasura-api-server's__ graphQL APIs following steps are needed to be fol
         }
       }
       ```
-  - __Create Dictionary with Hasura Action__:
+  - __Create Dictionary with Hasura Action API__:
+    - Why do we need this api: 
+      - This api runs Backend Nodejs server, which helps us to read dictionary csv from API and add dictinary content to hasura using graphQL APIs.
+    - Permission: `organization admin`
+    - Request format: [click](https://universal-water-877432.postman.co/workspace/Padma-Dictionary-Service%253A-Team-~9d59b87a-bee9-4a1e-8392-f2982f4175a6/api/bd60a954-a8bb-443e-958e-01b5117842e1/request/23450657-5d9f44fe-82df-4263-8b23-c6af4621b860)
+    - Response format:
+      ```
+      {
+        "data": {
+          "addDictionaryAPI": {
+            "result": {
+              "dictionary_id": "2681ec56-c3fc-42d7-99aa-bd859929a9d9"
+            }
+          }
+        }
+      }
+      ```
+    - Errors: 
+      - This api return error when dictinary is already exist
+      - Return error when input dictinary not found 
+      - Return error when Nodejs server not able to read CSV
+    - *Know more about Hasura Action*: [click](https://hasura.io/docs/latest/actions/index/)
 
   - __Update Dictionary__:
     - Permission: `organization admin` and `team admin`

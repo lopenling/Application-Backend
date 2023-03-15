@@ -2,7 +2,7 @@ actions:
   - name: addDictionaryAPI
     definition:
       kind: ""
-      handler: https://31b9-2401-4900-5d2a-813f-565a-f1b1-342b-610c.ngrok.io/addDictionaryAPI
+      handler: https://ae5e-2401-4900-5d12-9dcb-8e19-cb2a-85d8-d688.ngrok.io/addDictionaryAPI
       timeout: 50000
     permissions:
       - role: user
