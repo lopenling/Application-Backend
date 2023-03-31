@@ -51,7 +51,6 @@ function createGqlClient(session : sessionVariableFormat) {
       }
       
     let data = await createGqlClient(session).post('', body);
-
     return data;
   };
 

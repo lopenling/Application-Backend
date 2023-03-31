@@ -6,14 +6,275 @@ actions:
       timeout: 50000
     permissions:
       - role: user
+  - name: add_dictionary_file
+    definition:
+      kind: ""
+      handler: https://ae5e-2401-4900-5d12-9dcb-8e19-cb2a-85d8-d688.ngrok.io/addDictionaryFile
+    permissions:
+      - role: user
 custom_types:
-  enums: []
+  enums:
+    - name: MyMutationDataAccessModeEnum
+      values:
+        - description: Custom Dictionary
+          is_deprecated: null
+          value: Custom
+        - description: Public Dictionary
+          is_deprecated: null
+          value: Public
+    - name: MyMutationDataDictionaryConstraint
+      values:
+        - description: unique or primary key constraint on columns "name"
+          is_deprecated: null
+          value: dictionary_name_key
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: dictionary_pkey
+    - name: MyMutationDataDictionaryUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: access_mode
+        - description: column name
+          is_deprecated: null
+          value: name
+    - name: MyMutationDataLanguageEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: English
+        - description: null
+          is_deprecated: null
+          value: Tibetan
+    - name: MyMutationDataWordAssoicationTypeEnum
+      values:
+        - description: Associated words are antonymous
+          is_deprecated: null
+          value: Antonym
+        - description: Associated words are synonymous
+          is_deprecated: null
+          value: Synonym
+    - name: MyMutationOrganizationMemberConstraint
+      values:
+        - description: unique or primary key constraint on columns "user_id", "organization_id"
+          is_deprecated: null
+          value: organization_member_pkey
+    - name: MyMutationOrganizationMemberUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: user_id
+    - name: MyMutationTeamConstraint
+      values:
+        - description: unique or primary key constraint on columns "name"
+          is_deprecated: null
+          value: team_name_key
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: team_pkey
+    - name: MyMutationTeamUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: admin_id
+        - description: column name
+          is_deprecated: null
+          value: logo
+        - description: column name
+          is_deprecated: null
+          value: name
+    - name: MyMutationDictionaryPermissionConstraint
+      values:
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: dictionary_permissions_pkey
+        - description: unique or primary key constraint on columns "dictionary_id", "team_id"
+          is_deprecated: null
+          value: dictionary_permissions_team_id_dictionary_id_key
+    - name: MyMutationDictionaryPermissionUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: dictionary_id
+        - description: column name
+          is_deprecated: null
+          value: team_id
+    - name: MyMutationTeamMemberConstraint
+      values:
+        - description: unique or primary key constraint on columns "user_id", "team_id"
+          is_deprecated: null
+          value: team_member_pkey
+    - name: MyMutationTeamMemberUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: user_id
+    - name: MyMutationOrganizationConstraint
+      values:
+        - description: unique or primary key constraint on columns "admin_id"
+          is_deprecated: null
+          value: organization_admin_id_key
+        - description: unique or primary key constraint on columns "name"
+          is_deprecated: null
+          value: organization_name_key
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: organization_pkey
+    - name: MyMutationOrganizationUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: logo
+        - description: column name
+          is_deprecated: null
+          value: name
+        - description: column name
+          is_deprecated: null
+          value: same_as_team
+    - name: MyMutationUserConstraint
+      values:
+        - description: unique or primary key constraint on columns "auth_id"
+          is_deprecated: null
+          value: user_auth_id_key
+        - description: unique or primary key constraint on columns "email"
+          is_deprecated: null
+          value: user_email_key
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: user_pkey
+    - name: MyMutationUserUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: auth_id
+        - description: column name
+          is_deprecated: null
+          value: email
+        - description: column name
+          is_deprecated: null
+          value: name
+    - name: MyMutationDataThesaurusConstraint
+      values:
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: thesaurus_pkey
+        - description: unique or primary key constraint on columns "relationship", "source_word_id", "target_word_id"
+          is_deprecated: null
+          value: thesaurus_source_word_id_target_word_id_relationship_key
+    - name: MyMutationDataThesaurusUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: relationship
+        - description: column name
+          is_deprecated: null
+          value: source_word_id
+        - description: column name
+          is_deprecated: null
+          value: target_word_id
+    - name: MyMutationDataWordsConstraint
+      values:
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: words_pkey
+        - description: unique or primary key constraint on columns "word"
+          is_deprecated: null
+          value: words_word_key
+    - name: MyMutationDataWordsUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: language
+        - description: column name
+          is_deprecated: null
+          value: word
+    - name: MyMutationDataDescriptionsConstraint
+      values:
+        - description: unique or primary key constraint on columns "description", "word_id", "dictionary_id"
+          is_deprecated: null
+          value: descriptions_description_word_id_dictionary_id_key
+        - description: unique or primary key constraint on columns "id"
+          is_deprecated: null
+          value: descriptions_pkey
+    - name: MyMutationDataDescriptionsUpdateColumn
+      values:
+        - description: column name
+          is_deprecated: null
+          value: description
+        - description: column name
+          is_deprecated: null
+          value: dictionary_id
+        - description: column name
+          is_deprecated: null
+          value: language
+        - description: column name
+          is_deprecated: null
+          value: last_updated_by
+        - description: column name
+          is_deprecated: null
+          value: updated_at
+        - description: column name
+          is_deprecated: null
+          value: word_id
   input_objects:
     - name: DictionaryObj
+    - name: MyMutationDataDictionaryInsertInput
+    - name: MyMutationDataDescriptionsArrRelInsertInput
+    - name: MyMutationDataDescriptionsInsertInput
+    - name: MyMutationDataDictionaryObjRelInsertInput
+    - name: MyMutationDataDictionaryOnConflict
+    - name: MyMutationDataDictionaryBoolExp
+    - name: MyMutationDataAccessModeEnumComparisonExp
+    - name: MyMutationDataDescriptionsBoolExp
+    - name: MyMutationStringComparisonExp
+    - name: MyMutationUuidComparisonExp
+    - name: MyMutationIntComparisonExp
+    - name: MyMutationDataLanguageEnumComparisonExp
+    - name: MyMutationTimestamptzComparisonExp
+    - name: MyMutationUserBoolExp
+    - name: MyMutationOrganizationBoolExp
+    - name: MyMutationOrganizationMemberBoolExp
+    - name: MyMutationBooleanComparisonExp
+    - name: MyMutationTeamBoolExp
+    - name: MyMutationDictionaryPermissionBoolExp
+    - name: MyMutationTeamMemberBoolExp
+    - name: MyMutationDataWordsBoolExp
+    - name: MyMutationDataThesaurusBoolExp
+    - name: MyMutationDataWordAssoicationTypeEnumComparisonExp
+    - name: MyMutationUserObjRelInsertInput
+    - name: MyMutationUserInsertInput
+    - name: MyMutationOrganizationObjRelInsertInput
+    - name: MyMutationOrganizationInsertInput
+    - name: MyMutationDataDictionaryArrRelInsertInput
+    - name: MyMutationOrganizationMemberArrRelInsertInput
+    - name: MyMutationOrganizationMemberInsertInput
+    - name: MyMutationOrganizationMemberOnConflict
+    - name: MyMutationTeamArrRelInsertInput
+    - name: MyMutationTeamInsertInput
+    - name: MyMutationDictionaryPermissionArrRelInsertInput
+    - name: MyMutationDictionaryPermissionInsertInput
+    - name: MyMutationTeamObjRelInsertInput
+    - name: MyMutationTeamOnConflict
+    - name: MyMutationDictionaryPermissionOnConflict
+    - name: MyMutationTeamMemberArrRelInsertInput
+    - name: MyMutationTeamMemberInsertInput
+    - name: MyMutationTeamMemberOnConflict
+    - name: MyMutationOrganizationOnConflict
+    - name: MyMutationUserOnConflict
+    - name: MyMutationDataWordsObjRelInsertInput
+    - name: MyMutationDataWordsInsertInput
+    - name: MyMutationDataThesaurusArrRelInsertInput
+    - name: MyMutationDataThesaurusInsertInput
+    - name: MyMutationDataThesaurusOnConflict
+    - name: MyMutationDataWordsOnConflict
+    - name: MyMutationDataDescriptionsOnConflict
+    - name: file
+    - name: file_input
   objects:
     - name: results
     - name: dictionary
     - name: SampleOutput
     - name: AddDictionaryAPIOutput
     - name: AddDOutput
+    - name: MyMutationOutput
   scalars: []

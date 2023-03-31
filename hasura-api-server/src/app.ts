@@ -1,26 +1,17 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
-
+import express from "express";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
+import fs from "fs"
 import ReadDictionary from "./dictionary_services";
-import { 
-  hasuraDataFormat,
-  sessionVariableFormat, 
-  wordDescriptionFormat 
-} from "./interface";
-
-import { 
-  getDictionary,
-  addDictionary,
-  addWordDescriptions
-} from "./graphql_services";
-
+import * as danfo from "danfojs-node"
+import { dictionaryContentFormat, hasuraDataFormat, sessionVariableFormat } from "./interface";
+import {dictionaryList, createDictionary} from "./dictionary_upload_services"
 
 dotenv.config();
 const app = express();
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({limit: '50mb'}));
 
 const port = process.env.PORT;
 
@@ -34,11 +25,8 @@ app.post("/addDictionaryAPI", async (req, res) => {
   const { dictionary } = req.body.input;
   const session: sessionVariableFormat  = req.body.session_variables;
   let hasura_input_data: hasuraDataFormat = dictionary;
-  let dictionary_id:string | number = "";
-  let addDictionaryPermission: boolean = false;
-  let last_updated_by = session['x-hasura-user-id'];
-  try {
 
+  try {
     const d = new ReadDictionary(hasura_input_data)
     let {dictionary_data, isError} = await d.getDictionaryList();
     //on failure
@@ -48,47 +36,20 @@ app.post("/addDictionaryAPI", async (req, res) => {
       })
     }
     //check if dictionary is already available in database
-    const { data } = await getDictionary(dictionary.name, session);
-    //on success
-    if(data) {
-      // on dictionary available
-      if(data.data.data_dictionary.length > 0) {
-        addDictionaryPermission = false;
-        return res.status(400).json({
-          message: "Dictionary is already exist"
-        })
-      } else {
-        addDictionaryPermission = true;
-      }
-    }
-    if (dictionary_data !== undefined && addDictionaryPermission ) {
+    let isDictionaryExist = await dictionaryList(dictionary.name,session)
 
-      //create dictionary 
-      const { data } = await addDictionary(hasura_input_data, session);
-      dictionary_id = data.data.insert_data_dictionary.returning[0].id;
-
-       //insert words and descriptions
-      if(dictionary_id !== "") {
-
-        dictionary_data[dictionary.name].forEach( async(o:any) => {
-
-          let words: wordDescriptionFormat = {
-            word : o.Tibetan,
-            word_language: hasura_input_data.source,
-            description: o.Description,
-            dictionary_id: dictionary_id,
-            last_updated_by: last_updated_by,
-            des_language: hasura_input_data.target
-          };
-
-          const { data } = await addWordDescriptions( words, session);
-        });
-      }
-      
-      return res.json({
-        result: {dictionary_id}
+    if(isDictionaryExist === true) {
+      return res.status(400).json({
+        message: ` Dictionary is already exist`
       })
+    }
 
+    if (dictionary_data !== undefined && isDictionaryExist === false ) {
+      //create dictionary 
+     const dictionary_id:String | Number = await createDictionary(hasura_input_data, dictionary_data[dictionary.name], session);
+     return res.json({
+      result: {dictionary_id}
+    })
     } else {
       return res.status(400).json({
         message: ` Dictionary '${hasura_input_data.name}' not found`
@@ -97,6 +58,66 @@ app.post("/addDictionaryAPI", async (req, res) => {
     
   } catch (e: any) {
     return res.status(400).json({
+      message: e.message
+    })
+  }
+})
+
+//endpoint to upload dictionary content from a csv file;
+app.post("/addDictionaryFile", async(req, res) => {
+  console.log("...Loading")
+  const { file } = req.body.input;
+  const session: sessionVariableFormat  = req.body.session_variables;
+  const dictionary_info: hasuraDataFormat = {
+    name: file.name.substr(0, file.name.lastIndexOf(".")),
+    target: file.source,
+    source: file.target,
+    access_mode: file.access_mode,
+    organization_id: file.organization_id
+  };
+
+  let df_to_json:object;
+  let dictionary:dictionaryContentFormat[];
+  let dictionary_id:String | Number;
+
+  //read dictionary file
+  const buffer = Buffer.from(file.base64str, "base64")
+  fs.writeFileSync(`./public/files/${file.name}`, buffer, "base64")
+
+  try {
+    //read csv file and convert it to Json format:
+    const df = await danfo.readCSV(`./public/files/${file.name}`)
+    df_to_json = {...danfo.toJSON(df)}
+    dictionary = Object.values(df_to_json)
+
+    // check if dictionary is already available in database
+    let isDictionaryExist = await dictionaryList(dictionary_info.name,session)
+
+    if(isDictionaryExist === true) {
+      return res.status(400).json({
+        message: ` Dictionary is already exist`
+      })
+    }
+
+    if (file !== undefined && isDictionaryExist === false ) {
+      //create dictionary 
+      dictionary_id = await createDictionary(dictionary_info, dictionary, session);
+
+      if(dictionary_id) {
+        // delete file after insertion of data into database
+        fs.unlinkSync(`./public/files/${file.name}`)
+      }
+    } else {
+      return res.status(400).json({
+        message: ` Dictionary '${dictionary_info.name}' not found`
+      })
+    }
+    return res.json({
+      result: {dictionary_id}
+    })
+
+  } catch(e:any) {
+    return res.status(404).json({
       message: e.message
     })
   }
