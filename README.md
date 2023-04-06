@@ -379,10 +379,11 @@ To use __hasura-api-server's__ graphQL APIs following steps are needed to be fol
         }
       }
       ```
-  - __Create Dictionary with Hasura Action API__:
+  - __Create Dictionary with Hasura Action via API__:
     - Why do we need this api: 
-      - This api runs Backend Nodejs server, which helps us to read dictionary csv from API and add dictinary content to hasura using graphQL APIs.
+      - This api runs Backend Nodejs server, which helps us to read dictionary csv from API and add dictionary content to hasura using graphQL APIs.
     - Permission: `organization admin`
+    - Endpoint: __POST__ /addDictionaryAPI
     - Request format: [click](https://universal-water-877432.postman.co/workspace/Padma-Dictionary-Service%253A-Team-~9d59b87a-bee9-4a1e-8392-f2982f4175a6/api/bd60a954-a8bb-443e-958e-01b5117842e1/request/23450657-5d9f44fe-82df-4263-8b23-c6af4621b860)
     - Response format:
       ```
@@ -398,9 +399,18 @@ To use __hasura-api-server's__ graphQL APIs following steps are needed to be fol
       ```
     - Errors: 
       - This api return error when dictinary is already exist
-      - Return error when input dictinary not found 
+      - Return error when input dictinary not found
       - Return error when Nodejs server not able to read CSV
     - *Know more about Hasura Action*: [click](https://hasura.io/docs/latest/actions/index/)
+
+  - __Create Dictionary with Hasura Action using via file upload__:
+    - Why do we need this api: 
+      - This api runs Backend Nodejs server, which helps us to read dictionary file of format CSV from Frontend and add dictionary content to hasura using graphQL APIs.
+    - Permission: `organization admin`
+    - Endpoint: __POST__ /addDictionaryFile
+    - Request format: [click](https://universal-water-877432.postman.co/workspace/Team-Workspace~9d59b87a-bee9-4a1e-8392-f2982f4175a6/documentation/23450657-a3c0bc96-95d9-4f08-84dc-da9d5b74c1b9?entity=request-3d3eb1ac-d08e-4565-b726-7250a59df9e5)
+    - Response format: Same as above api.
+    - Errors: Same as above api.
 
   - __Update Dictionary__:
     - Permission: `organization admin` and `team admin`

@@ -2,14 +2,14 @@ actions:
   - name: addDictionaryAPI
     definition:
       kind: ""
-      handler: https://ae5e-2401-4900-5d12-9dcb-8e19-cb2a-85d8-d688.ngrok.io/addDictionaryAPI
+      handler: http://172.17.0.1:3000/addDictionaryAPI
       timeout: 50000
     permissions:
       - role: user
   - name: add_dictionary_file
     definition:
       kind: ""
-      handler: https://ae5e-2401-4900-5d12-9dcb-8e19-cb2a-85d8-d688.ngrok.io/addDictionaryFile
+      handler: http://172.17.0.1:3000/addDictionaryFile
     permissions:
       - role: user
 custom_types:

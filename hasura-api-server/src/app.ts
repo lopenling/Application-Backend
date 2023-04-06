@@ -57,7 +57,7 @@ app.post("/addDictionaryAPI", async (req, res) => {
     }
     
   } catch (e: any) {
-    return res.status(400).json({
+    return res.status(500).json({
       message: e.message
     })
   }
@@ -65,7 +65,6 @@ app.post("/addDictionaryAPI", async (req, res) => {
 
 //endpoint to upload dictionary content from a csv file;
 app.post("/addDictionaryFile", async(req, res) => {
-  console.log("...Loading")
   const { file } = req.body.input;
   const session: sessionVariableFormat  = req.body.session_variables;
   const dictionary_info: hasuraDataFormat = {
@@ -94,6 +93,8 @@ app.post("/addDictionaryFile", async(req, res) => {
     let isDictionaryExist = await dictionaryList(dictionary_info.name,session)
 
     if(isDictionaryExist === true) {
+      // delete file after insertion of data into database
+      fs.unlinkSync(`./public/files/${file.name}`)
       return res.status(400).json({
         message: ` Dictionary is already exist`
       })
@@ -108,6 +109,8 @@ app.post("/addDictionaryFile", async(req, res) => {
         fs.unlinkSync(`./public/files/${file.name}`)
       }
     } else {
+      // delete file after insertion of data into database
+      fs.unlinkSync(`./public/files/${file.name}`)
       return res.status(400).json({
         message: ` Dictionary '${dictionary_info.name}' not found`
       })
@@ -117,7 +120,7 @@ app.post("/addDictionaryFile", async(req, res) => {
     })
 
   } catch(e:any) {
-    return res.status(404).json({
+    return res.status(500).json({
       message: e.message
     })
   }
