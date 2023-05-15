@@ -59,6 +59,9 @@ update_permissions:
       columns:
         - access_mode
         - name
+        - organization_id
+        - source
+        - target
       filter:
         _or:
           - organization:
