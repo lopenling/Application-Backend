@@ -2,13 +2,16 @@ import { Pool, Client } from "pg";
 import {  sessionVariableFormat } from "./interface";
 
 // Database connection configuration
-const pool = new Pool({
-  connectionString: `postgres://sanduplobzang:nWRJiaBAk51o@ep-winter-waterfall-101854.us-west-2.aws.neon.tech/neondb?sslmode=require`,
-  });
 
+  function creatPoolClient() {
+    const pool = new Pool({
+      connectionString: process.env.PG_CONNECTION_STRING
+    });
+    return pool
+  }
   
   export async function addWordDescriptions (inputVariable: (string | number)[][], session: sessionVariableFormat): Promise<any>{
-    const batchSize = 2000;
+    const batchSize = 1000;
     const batches = []
     let affected_rows = 0;
     //split values into batches
@@ -43,7 +46,7 @@ const pool = new Pool({
             SELECT word, source
             FROM input
             ON CONFLICT DO NOTHING
-            RETURNING id , word, language
+            RETURNING id , word
         )
         INSERT INTO data.descriptions (word_id, description, dictionary_id, last_updated_by, language)
         SELECT w.id, MD5(d.description), d.dictionary_id::UUID, d.last_updated_by::UUID, d.target
@@ -52,7 +55,7 @@ const pool = new Pool({
         RETURNING word_id, description;
       `
       try {
-      return pool.query(query, values);
+      return creatPoolClient().query(query, values);
       } catch (error: any) {
         console.log("Error with postgres insert :", error);
         return error;
