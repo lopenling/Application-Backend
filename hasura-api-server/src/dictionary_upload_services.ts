@@ -1,13 +1,15 @@
-import { getDictionary, addDictionary, addWordDescriptions } from "./graphql_services";
+import { getDictionary, addDictionary } from "./graphql_services";
+import { addWordDescriptions } from "./postgres_services"
 import {  sessionVariableFormat, hasuraDataFormat, dictionaryContentFormat, wordDescriptionFormat  } from "./interface";
   
 // checks if dictionary is already exist
   export async function dictionaryList(name: string, session: sessionVariableFormat) {
-    const { data, error } = await getDictionary(name, session);
+    const { data } = await getDictionary(name, session);
     //on success
     if(data) {
       // on dictionary available
       if(data.data.data_dictionary.length > 0) {
+        console.log("Dictionary is already in database")
         return true;
       } else {
         return false;
@@ -17,27 +19,25 @@ import {  sessionVariableFormat, hasuraDataFormat, dictionaryContentFormat, word
 
   export async function createDictionary(dictionary_info:hasuraDataFormat, dictionary_data: dictionaryContentFormat[], session: sessionVariableFormat) {
     let dictionary_id:string | number = "";  
+    let wordArray:(string | number)[][] = [];
     //create dictionary 
-      const { data, error } = await addDictionary(dictionary_info, session);
-      dictionary_id = data.data.insert_data_dictionary.returning[0].id;
-      
+    const { data } = await addDictionary(dictionary_info, session);
+    dictionary_id = data.data.insert_data_dictionary.returning[0].id;
        //insert words and descriptions
       if(dictionary_id !== "") {
-
-        dictionary_data.forEach( async(o:any) => {
-
-          let words: wordDescriptionFormat = {
-            word : o.Tibetan,
-            word_language: dictionary_info.source,
-            description: o.Description,
-            dictionary_id: dictionary_id,
-            last_updated_by: session['x-hasura-user-id'],
-            des_language: dictionary_info.target
-          };
-
-          const { data, error } = await addWordDescriptions( words, session);
+        dictionary_data.forEach( async(o) => {
+          wordArray.push([
+            o.Tibetan,
+            dictionary_info.source,
+            o.Description,
+            dictionary_id,
+            session['x-hasura-user-id'],
+            dictionary_info.target
+          ])
         });
+        const  data  = await addWordDescriptions( wordArray, session);
+        console.log("affected rows: ", data)
       }
-      console.log("Downloaded : " + dictionary_info.name)
-      return dictionary_id;
+      return dictionary_id
+
   }

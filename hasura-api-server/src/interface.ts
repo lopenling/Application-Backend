@@ -32,11 +32,11 @@ interface dictionaryDataFormat {
 
 interface wordDescriptionFormat {
     word : string;
-    word_language: string,
+    source: string,
     description: string,
     dictionary_id: string | number,
     last_updated_by: string | number,
-    des_language: string
+    target: string
 
 }
 

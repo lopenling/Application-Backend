@@ -55,26 +55,23 @@ function createGqlClient(session : sessionVariableFormat) {
   };
 
   // GraphQL query to add word and Descriptions 
-  async function addWordDescriptions (variables: wordDescriptionFormat, session: sessionVariableFormat): Promise<any>{
+  // async function addWordDescriptions (variables: wordDescriptionFormat, session: sessionVariableFormat): Promise<any>{
 
-    let body = {
-        query: `mutation wordDescription($word: String!, $description: String!, $dictionary_id: uuid!, $last_updated_by: uuid!, $word_language : data_language_enum!, $des_language : data_language_enum!) {
-          insert_data_words_one(object: {word: $word, language: $word_language, descriptions: {data: {description: $description, dictionary_id: $dictionary_id, last_updated_by: $last_updated_by, language: $des_language}}}) {
-            id
-          }
-        }        
-        `,
-        variables
-      }
+  //   let body = {
+  //       query: `mutation wordDescription($word: String!, $description: String!, $dictionary_id: uuid!, $last_updated_by: uuid!, $word_language : data_language_enum!, $des_language : data_language_enum!) {
+  //         insert_data_words_one(object: {word: $word, language: $word_language, descriptions: {data: {description: $description, dictionary_id: $dictionary_id, last_updated_by: $last_updated_by, language: $des_language}}}) {
+  //           id
+  //         }
+  //       }        
+  //       `,
+  //       variables
+  //     }
       
-    const data = await createGqlClient(session).post('', body);
-    return data;
-  };
-
-
+  //   const data = await createGqlClient(session).post('', body);
+  //   return data;
+  // };
 
   export {
     getDictionary,
-    addDictionary, 
-    addWordDescriptions
+    addDictionary
   }
