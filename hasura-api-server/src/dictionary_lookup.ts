@@ -23,6 +23,7 @@ class DictionaryLookup {
                 // reading individual dictionary contents
                 
                 let df: DataFrame = await danfo.readCSV(`${base_url}${row['Name']}`, options)
+                console.log("df", df)
                 df_to_json = {...danfo.toJSON(df)}
                 dfJson_value = Object.values(df_to_json)
                 dictionary[`${row.Title}`]= dfJson_value

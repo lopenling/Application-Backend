@@ -28,14 +28,18 @@ import {  sessionVariableFormat } from "./interface";
       }
       return affected_rows
     } catch (error) {
-      console.log("Error executing queries:", error);
-      return error
+      console.log("error : ", error)
     }   
   };
 
   function batchProcessor(batch:(string | number)[][]) {
+
     //setting dynamic placeholder
-    const valuePlacehoder = batch.map((_, i) => `($${i * 6 + 1}, $${i * 6 + 2}, $${i * 6 + 3}, $${i * 6 + 4}, $${i * 6 + 5}, $${i * 6 + 6})`).join(", ");
+    const valuePlacehoder = batch
+      .filter(item => item[0] != null)
+      .map((_, i) => `($${i * 6 + 1}, $${i * 6 + 2}, $${i * 6 + 3}, $${i * 6 + 4}, $${i * 6 + 5}, $${i * 6 + 6})`)
+      .join(", ");
+      
       const values = batch.flat();
       const query = `
         WITH input(word, source, description, dictionary_id, last_updated_by, target) AS (
@@ -49,15 +53,15 @@ import {  sessionVariableFormat } from "./interface";
             RETURNING id , word
         )
         INSERT INTO data.descriptions (word_id, description, dictionary_id, last_updated_by, language)
-        SELECT w.id, MD5(d.description), d.dictionary_id::UUID, d.last_updated_by::UUID, d.target
+        SELECT w.id, d.description, d.dictionary_id::UUID, d.last_updated_by::UUID, d.target
         FROM input d
         JOIN w USING (word)
+        ON CONFLICT DO NOTHING
         RETURNING word_id, description;
       `
       try {
       return creatPoolClient().query(query, values);
       } catch (error: any) {
-        console.log("Error with postgres insert :", error);
         return error;
       }
   }

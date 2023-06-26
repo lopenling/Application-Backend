@@ -75,17 +75,20 @@ app.post("/addDictionaryFile", async(req, res) => {
     organization_id: file.organization_id
   };
 
+  const options: object = {
+    delimiter: '\t'
+  }
   let df_to_json:object;
   let dictionary:dictionaryContentFormat[];
   let dictionary_id:String | Number;
 
   //read dictionary file
   const buffer = Buffer.from(file.base64str, "base64")
-  fs.writeFileSync(`./public/files/${file.name}`, buffer, "base64")
+  fs.writeFileSync(`./public/files/dictionary.csv`, buffer, "base64")
 
   try {
     //read csv file and convert it to Json format:
-    const df = await danfo.readCSV(`./public/files/${file.name}`)
+    const df = await danfo.readCSV(`./public/files/dictionary.csv`, options)
     df_to_json = {...danfo.toJSON(df)}
     dictionary = Object.values(df_to_json)
 
@@ -93,8 +96,7 @@ app.post("/addDictionaryFile", async(req, res) => {
     let isDictionaryExist = await dictionaryList(dictionary_info.name,session)
 
     if(isDictionaryExist === true) {
-      // delete file after insertion of data into database
-      fs.unlinkSync(`./public/files/${file.name}`)
+      fs.unlinkSync(`./public/files/dictionary.csv`)
       return res.status(400).json({
         message: ` Dictionary is already exist`
       })
@@ -105,21 +107,20 @@ app.post("/addDictionaryFile", async(req, res) => {
       dictionary_id = await createDictionary(dictionary_info, dictionary, session);
 
       if(dictionary_id) {
-        // delete file after insertion of data into database
-        fs.unlinkSync(`./public/files/${file.name}`)
       }
     } else {
-      // delete file after insertion of data into database
-      fs.unlinkSync(`./public/files/${file.name}`)
+      fs.unlinkSync(`./public/files/dictionary.csv`)
       return res.status(400).json({
         message: ` Dictionary '${dictionary_info.name}' not found`
       })
     }
+    fs.unlinkSync(`./public/files/dictionary.csv`)
     return res.json({
       result: {dictionary_id}
     })
 
   } catch(e:any) {
+    fs.unlinkSync(`./public/files/dictionary.csv`)
     return res.status(400).json({
       message: e.message
     })
