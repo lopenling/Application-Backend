@@ -96,7 +96,7 @@ app.post("/addDictionaryFile", async(req, res) => {
     let isDictionaryExist = await dictionaryList(dictionary_info.name,session)
 
     if(isDictionaryExist === true) {
-      fs.unlinkSync(`./public/files/dictionary.csv`)
+      fs.writeFileSync("./public/files/dictionary.csv","")
       return res.status(400).json({
         message: ` Dictionary is already exist`
       })
@@ -109,18 +109,18 @@ app.post("/addDictionaryFile", async(req, res) => {
       if(dictionary_id) {
       }
     } else {
-      fs.unlinkSync(`./public/files/dictionary.csv`)
+      fs.writeFileSync("./public/files/dictionary.csv","")
       return res.status(400).json({
         message: ` Dictionary '${dictionary_info.name}' not found`
       })
     }
-    fs.unlinkSync(`./public/files/dictionary.csv`)
+    fs.writeFileSync("./public/files/dictionary.csv","")
     return res.json({
       result: {dictionary_id}
     })
 
   } catch(e:any) {
-    fs.unlinkSync(`./public/files/dictionary.csv`)
+    fs.writeFileSync("./public/files/dictionary.csv","")
     return res.status(400).json({
       message: e.message
     })
