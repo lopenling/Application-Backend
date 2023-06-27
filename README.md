@@ -55,6 +55,7 @@ From __hasura-api-server__ folder : Do the following
 PORT=3000
 WEBADMIN_GRAPHQL_ENDPOINT=
 WEBADMIN_GRAPHQL_ADMIN_SECRET= 
+PG_CONNECTION_STRING=
 ```
 
 ### Docs
