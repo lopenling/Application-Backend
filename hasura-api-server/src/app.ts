@@ -13,7 +13,7 @@ const app = express();
 app.use(bodyParser.urlencoded({limit: '200mb', extended: true}));
 app.use(bodyParser.json({limit: '200mb'}));
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 app.get('/', async (req, res) => {
   res.send('Padma api server :-)');
@@ -37,7 +37,6 @@ app.post("/addDictionaryAPI", async (req, res) => {
     }
     //check if dictionary is already available in database
     let isDictionaryExist = await dictionaryList(dictionary.name,session)
-
     if(isDictionaryExist === true) {
       return res.status(400).json({
         message: ` Dictionary is already exist`
