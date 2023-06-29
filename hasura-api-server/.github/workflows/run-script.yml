@@ -1,0 +1,16 @@
+name: Node.js App CI/CD
+
+on:
+  push:
+    branches:
+      - hasura-db-graphql-schema
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and Start Container
+        run: ./setup-dev/setup-dev.sh
