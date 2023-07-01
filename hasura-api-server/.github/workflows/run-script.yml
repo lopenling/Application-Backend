@@ -14,5 +14,5 @@ jobs:
 
       - name: Build and Start Container
         run: |
-            chmod +x ./setup-dev/setup-dev.sh
-            ./setup-dev/setup-dev.sh
+            chmod +x ./hasura-api-server/setup-dev/setup-dev.sh
+            ./hasura-api-server/setup-dev/setup-dev.sh
