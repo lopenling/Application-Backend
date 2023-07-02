@@ -3,7 +3,7 @@ name: Node.js App CI/CD
 on:
   push:
     branches:
-      - hasura-db-graphql-schema
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -34,7 +34,8 @@ import {  sessionVariableFormat } from "./interface";
 
   function batchProcessor(batch:(string | number)[][]) {
 
-    //setting dynamic placeholder
+    // Remove Null values and setup dynamic placeholder
+    // for instances: valuePlaceholder would be ($1,$2,$3,$4,$5,$6,.......)
     const valuePlacehoder = batch
       .filter(item => item[0] != null)
       .map((_, i) => `($${i * 6 + 1}, $${i * 6 + 2}, $${i * 6 + 3}, $${i * 6 + 4}, $${i * 6 + 5}, $${i * 6 + 6})`)
