@@ -19,6 +19,10 @@ jobs:
           username: ${{ secrets.LINODE_USER_NAME }}
           password: ${{ secrets.LINODE_PASSWORD }}
           script: |
-            cd Padma-Dictionary-Service/hasura-api-server
+            cd Padma-Dictionary-Service
+            chmod +x ./setup-dev/setup-dev.sh
+            ./setup-dev/setup-dev.sh
+
+            cd hasura-api-server
             chmod +x ./setup-dev/setup-dev.sh
             ./setup-dev/setup-dev.sh
