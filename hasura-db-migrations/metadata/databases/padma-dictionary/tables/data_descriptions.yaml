@@ -1,0 +1,84 @@
+table:
+  name: descriptions
+  schema: data
+object_relationships:
+  - name: dictionary
+    using:
+      foreign_key_constraint_on: dictionary_id
+  - name: updated_by
+    using:
+      foreign_key_constraint_on: last_updated_by
+  - name: word
+    using:
+      foreign_key_constraint_on: word_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _or:
+          - dictionary:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - dictionary:
+              dictionary_permissions:
+                team:
+                  team_members:
+                    user_id:
+                      _eq: X-Hasura-User-Id
+      columns:
+        - description
+        - dictionary_id
+        - language
+        - last_updated_by
+        - updated_at
+        - word_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - description
+        - dictionary_id
+        - id
+        - language
+        - last_updated_by
+        - updated_at
+        - word_id
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - description
+        - dictionary_id
+        - language
+        - last_updated_by
+        - updated_at
+        - word_id
+      filter:
+        _or:
+          - dictionary:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - dictionary:
+              dictionary_permissions:
+                team:
+                  team_members:
+                    user_id:
+                      _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        _or:
+          - dictionary:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - dictionary:
+              dictionary_permissions:
+                team:
+                  admin_id:
+                    _eq: X-Hasura-User-Id

@@ -1,0 +1,19 @@
+name: Node.js App CI/CD
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and Start Container
+        run: |
+          cd hasura-api-server
+          chmod +x ./setup-dev/setup-dev.sh
+          ./setup-dev/setup-dev.sh 

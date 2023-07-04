@@ -1,0 +1,34 @@
+type Query {
+  addDictionaryAPI(
+    dictionary: DictionaryObj!
+  ): AddDictionaryAPIOutput
+}
+
+type Query {
+  add_dictionary_file(
+    file: file!
+  ): AddDictionaryAPIOutput
+}
+
+input DictionaryObj {
+  name: String!
+  target: String!
+  source: String!
+  access_mode: String!
+  organization_id: uuid!
+}
+
+input file {
+  name: String!
+  source: String!
+  target: String!
+  access_mode: String!
+  organization_id: String!
+  file_type: String!
+  base64str: String!
+}
+
+type AddDictionaryAPIOutput {
+  result: json!
+}
+

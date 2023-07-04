@@ -1,0 +1,70 @@
+table:
+  name: team_member
+  schema: public
+object_relationships:
+  - name: team
+    using:
+      foreign_key_constraint_on: team_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _or:
+          - team:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - team:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+      columns:
+        - team_id
+        - user_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - team_id
+        - user_id
+      filter:
+        _or:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - team:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - team:
+              team_members:
+                user_id:
+                  _eq: X-Hasura-User-Id
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - user_id
+      filter:
+        _or:
+          - team:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - team:
+              admin_id:
+                _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        _or:
+          - team:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - team:
+              organization:
+                admin_id:
+                  _eq: X-Hasura-User-Id

@@ -1,0 +1,79 @@
+table:
+  name: team
+  schema: public
+object_relationships:
+  - name: admin
+    using:
+      foreign_key_constraint_on: admin_id
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+array_relationships:
+  - name: dictionary_permission
+    using:
+      foreign_key_constraint_on:
+        column: team_id
+        table:
+          name: dictionary_permission
+          schema: public
+  - name: team_members
+    using:
+      foreign_key_constraint_on:
+        column: team_id
+        table:
+          name: team_member
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - admin_id
+        - logo
+        - name
+        - organization_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - admin_id
+        - id
+        - logo
+        - name
+        - organization_id
+      filter:
+        _or:
+          - organization:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - team_members:
+              user_id:
+                _eq: X-Hasura-User-Id
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - admin_id
+        - logo
+        - name
+      filter:
+        _or:
+          - organization:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - organization:
+              teams:
+                team_members:
+                  user_id:
+                    _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id

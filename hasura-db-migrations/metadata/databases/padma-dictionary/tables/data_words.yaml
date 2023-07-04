@@ -1,0 +1,95 @@
+table:
+  name: words
+  schema: data
+array_relationships:
+  - name: descriptions
+    using:
+      foreign_key_constraint_on:
+        column: word_id
+        table:
+          name: descriptions
+          schema: data
+  - name: thesaurus
+    using:
+      foreign_key_constraint_on:
+        column: source_word_id
+        table:
+          name: thesaurus
+          schema: data
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _or:
+          - _exists:
+              _table:
+                name: organization
+                schema: public
+              _where:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - _exists:
+              _table:
+                name: organization
+                schema: public
+              _where:
+                teams:
+                  team_members:
+                    user_id:
+                      _eq: X-Hasura-User-Id
+      columns:
+        - language
+        - word
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - language
+        - word
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - language
+        - word
+      filter:
+        _or:
+          - _exists:
+              _table:
+                name: organization
+                schema: public
+              _where:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - _exists:
+              _table:
+                name: organization
+                schema: public
+              _where:
+                teams:
+                  team_members:
+                    user_id:
+                      _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        _or:
+          - _exists:
+              _table:
+                name: organization
+                schema: public
+              _where:
+                admin_id:
+                  _eq: X-Hasura-User-Id
+          - _exists:
+              _table:
+                name: organization
+                schema: public
+              _where:
+                teams:
+                  admin_id:
+                    _eq: X-Hasura-User-Id

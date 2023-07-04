@@ -1,0 +1,55 @@
+table:
+  name: organization_member
+  schema: public
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - organization_id
+        - user_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - organization_id
+        - user_id
+      filter:
+        _or:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              admin_id:
+                _eq: X-Hasura-User-Id
+          - organization:
+              organization_members:
+                user_id:
+                  _eq: X-Hasura-User-Id
+      allow_aggregations: true
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - user_id
+      filter:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        organization:
+          admin_id:
+            _eq: X-Hasura-User-Id
