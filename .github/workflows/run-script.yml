@@ -17,8 +17,5 @@ jobs:
         with:
           host: ${{ secrets.SECRET_IP }}
           username: ${{ secrets.LINODE_USER_NAME }}
-          key: ${{ secrets.LINODE_SSH_PRIVATE_KEY }}
-          script: |
-            cd hasura-api-server
-            chmod +x ./setup-dev/setup-dev.sh
-            ./setup-dev/setup-dev.sh
+          password: ${{ secrets.LINODE_PASSWORD }}
+          script: whoami
