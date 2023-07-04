@@ -12,12 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build and Start Container
-        run: |
-          cd hasura-api-server
-          chmod +x ./setup-dev/setup-dev.sh
-          ./setup-dev/setup-dev.sh
-
       - name: Deploy to Linode
         uses: appleboy/ssh-action@master
         with:
