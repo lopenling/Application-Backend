@@ -3,7 +3,7 @@ name: Node.js App CI/CD
 on:
   push:
     branches:
-      - main
+      - deploy-script
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,4 +16,15 @@ jobs:
         run: |
           cd hasura-api-server
           chmod +x ./setup-dev/setup-dev.sh
-          ./setup-dev/setup-dev.sh 
+          ./setup-dev/setup-dev.sh
+
+      - name: Deploy to Linode
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SECRET_IP }}
+          username: ${{ secrets.SECRET_LINODE_SERVER_NAME }}
+          key: ${{ secrets.LINODE_SSH_PRIVATE_KEY }}
+          script: |
+            cd hasura-api-server
+            chmod +x ./setup-dev/setup-dev.sh
+            ./setup-dev/setup-dev.sh
