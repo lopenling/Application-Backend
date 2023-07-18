@@ -3,7 +3,7 @@ name: Node.js App CI/CD
 on:
   push:
     branches:
-      - main
+      - hasura-jwt-token
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,10 +19,12 @@ jobs:
           username: ${{ secrets.LINODE_USER_NAME }}
           password: ${{ secrets.LINODE_PASSWORD }}
           script: |
-            cd Padma-Dictionary-Service/setup-dev
+            cd Padma-Dictionary-Service/
+            git pull origin main
+            cd setup-dev/
             chmod +x setup-dev.sh
             ./setup-dev.sh
             cd .. 
-            cd hasura-api-server
+            cd hasura-api-server/
             chmod +x ./setup-dev/setup-dev.sh
             ./setup-dev/setup-dev.sh
