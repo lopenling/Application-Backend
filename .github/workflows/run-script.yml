@@ -31,4 +31,4 @@ jobs:
             cd .. 
             cd hasura-api-server/
             chmod +x ./setup-prod/setup-prod.sh
-            ./setup-dev/setup-prod.sh
+            ./setup-prod/setup-prod.sh
