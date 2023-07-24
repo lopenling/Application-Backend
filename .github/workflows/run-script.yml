@@ -3,7 +3,7 @@ name: Node.js App CI/CD
 on:
   push:
     branches:
-      - hasura-jwt-token
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
