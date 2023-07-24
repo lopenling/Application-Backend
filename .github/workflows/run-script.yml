@@ -15,20 +15,26 @@ jobs:
       - name: Deploy to Linode
         uses: appleboy/ssh-action@master
         env:
-          HASURA_GRAPHQL_ADMIN_SECRET: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
-          HASURA_GRAPHQL_JWT_SECRET: ${{ secrets.HASURA_GRAPHQL_JWT_SECRET }}
           HASURA_ENDPOINT: ${{ secrets.HASURA_ENDPOINT }}
+          HASURA_GRAPHQL_METADATA_DATABASE_URL: ${{ secrets.HASURA_GRAPHQL_METADATA_DATABASE_URL }}
+          HASURA_GRAPHQL_ADMIN_SECRET: ${{ secrets.HASURA_GRAPHQL_ADMIN_SECRET }}
+          HASURA_GRAPHQL_JWT_SECRET: ${{secrets.HASURA_GRAPHQL_JWT_SECRET}}
         with:
           host: ${{ secrets.SECRET_IP }}
           username: ${{ secrets.LINODE_USER_NAME }}
           password: ${{ secrets.LINODE_PASSWORD }}
+          script_stop: true
+          envs: HASURA_GRAPHQL_METADATA_DATABASE_URL, HASURA_ENDPOINT, HASURA_GRAPHQL_ADMIN_SECRET, HASURA_GRAPHQL_JWT_SECRET 
           script: |
             cd Padma-Dictionary-Service/
             git pull origin hasura-jwt-token
+
             cd setup-prod/
             chmod +x setup-prod.sh
             ./setup-prod.sh
+
             cd .. 
+            
             cd hasura-api-server/
-            chmod +x ./setup-prod/setup-prod.sh
-            ./setup-prod/setup-prod.sh
+            chmod +x ./setup-dev/setup-dev.sh
+            ./setup-dev/setup-dev.sh
