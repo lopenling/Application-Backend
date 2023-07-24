@@ -26,7 +26,7 @@ jobs:
           envs: HASURA_GRAPHQL_METADATA_DATABASE_URL, HASURA_ENDPOINT, HASURA_GRAPHQL_ADMIN_SECRET, HASURA_GRAPHQL_JWT_SECRET 
           script: |
             cd Padma-Dictionary-Service/
-            git pull origin hasura-jwt-token
+            git pull origin main
             cd setup-prod/
             chmod +x setup-prod.sh
             ./setup-prod.sh
