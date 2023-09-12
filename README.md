@@ -4,7 +4,7 @@
   <br>
 </h1>
 
-<h3 align="center">Bokit</h3>
+<h3 align="center">Backend</h3>
 
 <p align="center">
   
