@@ -1,10 +1,10 @@
 <h1 align="center">
   <br>
-  <a href="http://eka.to"><img src="https://raw.githubusercontent.com/Lotus-King-Research/Home/main/Assets/Images/Lotus-King-Research-Logo-Transparent.png" alt="Lotus King Research" width="200"></a>
+  <a href="https://github.com/lopenling"><img src="https://raw.githubusercontent.com/lopenling/Home/main/assets/Lopenling-Logo-Icon.png" alt="Lopen Ling" width="100"></a>
   <br>
 </h1>
 
-<h3 align="center">Lotus King Research</h3>
+<h3 align="center">Bokit</h3>
 
 <p align="center">
   
