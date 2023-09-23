@@ -23,6 +23,3 @@ jobs:
             chmod +x setup-dev.sh
             ./setup-dev.sh
             cd .. 
-            cd hasura-api-server
-            chmod +x ./setup-dev/setup-dev.sh
-            ./setup-dev/setup-dev.sh

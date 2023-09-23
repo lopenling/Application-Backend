@@ -43,24 +43,10 @@ Repository for Padma's dictionary service with PSQL database and GRAPHQL API.
 
 <hr>
 
-## Hasura-Nodejs server
-
-__Note__ - the instructions below use yarn but work just as well with npm
-### Project setup 
-From __hasura-api-server__ folder : Do the following
-`yarn install` or `npm install`
-
-### Env Variables
-```
-PORT=3000
-WEBADMIN_GRAPHQL_ENDPOINT=
-WEBADMIN_GRAPHQL_ADMIN_SECRET= 
-PG_CONNECTION_STRING=
-```
 
 ### Docs
 
-To use __hasura-api-server's__ graphQL APIs following steps are needed to be followed: 
+To use __hasura__ graphQL APIs following steps are needed to be followed: 
 
 1- __Authentication__ : 
 
