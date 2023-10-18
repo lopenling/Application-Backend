@@ -4,7 +4,6 @@ services:
   env: docker
   autoDeploy: false
   healthCheckPath: /healthz
-  region: frankfurt
   envVars:
   - key: HASURA_GRAPHQL_METADATA_DATABASE_URL
     fromDatabase:
