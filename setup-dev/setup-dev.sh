@@ -3,7 +3,7 @@
 source .env-dev
 
 ## Container Name as specified in docker-compose.yml
-$DOCKER_CONTAINER_NAME="hasura/graphql-engine:latest"
+$DOCKER_CONTAINER_NAME="hasura/graphql-engine:2.36.0"
 
 ## Start/Restart docker container
 docker-compose rm -svf $DOCKER_CONTAINER_NAME;
