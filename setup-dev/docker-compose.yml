@@ -8,13 +8,15 @@ services:
     - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
+
   graphql-engine:
     image: hasura/graphql-engine:latest
     ports:
     - "9090:8080"
     depends_on:
     - "postgres"
-    restart: always
+    volumes:
+      - ../hasura-db-migrations:/db-migrations
     environment:
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
@@ -22,6 +24,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ADMIN_SECRET: Lopenling@Secret123
+
 volumes:
   db_data:
 
