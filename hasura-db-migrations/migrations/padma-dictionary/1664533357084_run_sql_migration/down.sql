@@ -1,5 +1,0 @@
--- Could not auto-generate a down migration.
--- Please write an appropriate down migration for the SQL below:
--- CREATE TRIGGER add_member
---     AFTER INSERT OR UPDATE ON "organization"
---     FOR EACH ROW EXECUTE PROCEDURE add_org_member();

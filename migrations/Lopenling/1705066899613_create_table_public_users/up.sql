@@ -1,0 +1,1 @@
+CREATE TABLE "public"."users" ("display_name" varchar, "first_name" varchar, "last_name" varchar, "email" varchar NOT NULL, "password" varchar, "id" serial NOT NULL, "avatar" varchar, "default_login_method" bpchar DEFAULT 'magic_link', PRIMARY KEY ("id") , UNIQUE ("email"), UNIQUE ("id"));

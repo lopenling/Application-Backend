@@ -1,0 +1,12 @@
+table:
+  name: users
+  schema: public
+select_permissions:
+  - role: public
+    permission:
+      columns:
+        - default_login_method
+        - email
+      filter: {}
+      limit: 1
+    comment: ""
