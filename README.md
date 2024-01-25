@@ -39,8 +39,10 @@ Repository for Padma's dictionary service with PSQL database and GRAPHQL API.
 ## Docs
 
 Setup for dev: 
+- Make sure you have [Docker](https://docs.docker.com/get-docker/) installed
 - Make sure you have [Hasura CLI](https://hasura.io/docs/latest/hasura-cli/overview/) installed
-- Run `hasura console`
+- Run `docker compose up` to start database and Hasura server
+- Run `hasura console` to open Hasura admin panel
 
 <!-- [Docs](https://github.com/Lotus-King-Research/Padma-Frontend/tree/master/docs) -->
 
