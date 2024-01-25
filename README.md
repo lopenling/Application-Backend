@@ -38,7 +38,11 @@ Repository for Padma's dictionary service with PSQL database and GRAPHQL API.
 
 ## Docs
 
-[Docs](https://github.com/Lotus-King-Research/Padma-Frontend/tree/master/docs)
+Setup for dev: 
+- Make sure you have [Hasura CLI](https://hasura.io/docs/latest/hasura-cli/overview/) installed
+- Run `hasura console`
+
+<!-- [Docs](https://github.com/Lotus-King-Research/Padma-Frontend/tree/master/docs) -->
 
 
 <hr>
