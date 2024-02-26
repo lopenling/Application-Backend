@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string('last_name').nullable()
 
       table.string('avatar').nullable()
-      table.string('default_login_method').defaultTo('magic_link')
+      table.string('default_login_method').nullable()
 
       table.string('email', 254).notNullable().unique()
       table.string('password').nullable()
