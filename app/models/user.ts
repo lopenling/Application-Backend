@@ -25,7 +25,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare avatar: string | null
 
   @column()
-  declare defaultLoginMethod: string | null
+  declare defaultLoginMethod: 'magic_link' | 'password' | null
 
   @column()
   declare email: string

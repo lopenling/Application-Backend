@@ -12,9 +12,12 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('users')
         .onDelete('cascade')
+
       table.text('token').notNullable()
+      table.string('type').notNullable()
 
       table.timestamp('created_at')
+      table.timestamp('expires_at')
     })
   }
 

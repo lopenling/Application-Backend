@@ -12,8 +12,11 @@ import router from '@adonisjs/core/services/router'
 
 router
   .group(() => {
-    router.post('auth/login', [AuthController, 'login'])
     router.post('auth/register', [AuthController, 'register'])
+    router.post('auth/magic_link', [AuthController, 'sendMagicLink'])
+    router.post('auth/token', [AuthController, 'tokenAuth'])
+    router.post('auth/set_password', [AuthController, 'setPassword'])
+    router.post('auth/login', [AuthController, 'login'])
     router.post('auth/logout', [AuthController, 'logout'])
   })
   .prefix('v1')
