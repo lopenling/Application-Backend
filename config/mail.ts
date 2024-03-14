@@ -18,15 +18,15 @@ const mailConfig = defineConfig({
     smtp: transports.smtp({
       host: env.get('SMTP_HOST'),
       port: env.get('SMTP_PORT'),
-      /**
-       * Uncomment the auth block if your SMTP
-       * server needs authentication
-       */
-      /* auth: {
-        type: 'login',
-        user: env.get('SMTP_USERNAME'),
-        pass: env.get('SMTP_PASSWORD'),
-      }, */
+
+      // Use auth only when password is set
+      auth: env.get('SMTP_PASSWORD')
+        ? {
+            type: 'login',
+            user: env.get('SMTP_USERNAME')!,
+            pass: env.get('SMTP_PASSWORD')!,
+          }
+        : undefined,
     }),
 
     // Temp disabled, might use in prod
