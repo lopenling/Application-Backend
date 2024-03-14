@@ -43,12 +43,13 @@ jobs:
           APP_KEY: ${{ secrets.PROD_APP_KEY }}
           DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
           SMTP_PASSWORD: ${{ secrets.PROD_SMTP_PORT }}
+          GITHUB_REF: $GITHUB_REF
         with:
           host: 213.199.45.162
           username: deployer
           command_timeout: 5m
           key: ${{ secrets.PROD_DEPLOYER_KEY }}
-          envs: APP_KEY,DB_PASSWORD,SMTP_PASSWORD
+          envs: APP_KEY,DB_PASSWORD,SMTP_PASSWORD,GITHUB_REF
           script_stop: true
           script: |
             echo ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
