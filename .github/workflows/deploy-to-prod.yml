@@ -40,28 +40,24 @@ jobs:
       - name: Deploy to production
         uses: appleboy/ssh-action@master
         env:
-          REGISTRY_USER: ${{ github.actor }}
-          REGISTRY_PASSWORD: ${{ github.token }}
-          DOCKER_REGISTRY: ${{ env.DOCKER_REGISTRY }}
           APP_KEY: ${{ secrets.PROD_APP_KEY }}
           DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
           SMTP_PASSWORD: ${{ secrets.PROD_SMTP_PORT }}
-          GITHUB_REF: $GITHUB_REF
         with:
           host: 213.199.45.162
           username: deployer
           command_timeout: 5m
           key: ${{ secrets.PROD_DEPLOYER_KEY }}
-          envs: REGISTRY_USER,REGISTRY_PASSWORD,DOCKER_REGISTRY,RELEASE_TAG,APP_KEY,DB_PASSWORD,SMTP_PASSWORD,GITHUB_REF
+          envs: APP_KEY,DB_PASSWORD,SMTP_PASSWORD
           script_stop: true
           script: |
-            echo $DOCKER_REGISTRY:$(echo $GITHUB_REF | cut -d '/' -f3)
-            docker login $DOCKER_REGISTRY --username $REGISTRY_USER --password $REGISTRY_PASSWORD
-            docker pull $DOCKER_REGISTRY:$(echo $GITHUB_REF | cut -d '/' -f3)
+            echo ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
+            docker login ${{ env.DOCKER_REGISTRY }} --username ${{ github.actor }} --password ${{ github.token }}
+            docker pull ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
             docker stop application-backend || true
             docker rm application-backend  || true
             docker run -d --name application-backend --restart always \
-              -e APP_KEY="$PROD_APP_KEY" \
+              -e APP_KEY="$APP_KEY" \
               -e DB_HOST="127.0.0.1" \
               -e DB_PORT="5432" \
               -e DB_USER="lopenling" \
