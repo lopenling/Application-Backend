@@ -1,0 +1,65 @@
+name: Deploy-to-Prod
+
+on:
+  push:
+    branches:
+      - adonis
+  release:
+    types:
+      - published
+
+env:
+  DOCKER_REGISTRY: ghcr.io/lopenling/application-backend
+  RELEASE_TAG: $(echo $GITHUB_REF | cut -d '/' -f3)
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.DOCKER_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+
+    # Build and push container
+    - name: Build and push container
+      run: |
+        docker build -t ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }} .
+        docker push ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
+
+  deploy_containers:
+    runs-on: [self-hosted, lopenling]
+    needs: build-and-push-image
+    steps:
+    # Login to container registry
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.DOCKER_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+
+    # Deploy it!
+    - name: Deploy to Prod
+      run: |
+        docker pull ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
+        docker stop application-backend || true
+        docker rm application-backend  || true
+        docker run -d --name application-backend --restart always \
+          -e APP_KEY="${{ secrets.PROD_APP_KEY }}" \
+          -e DB_HOST="127.0.0.1" \
+          -e DB_PORT="5432" \
+          -e DB_USER="lopenling" \
+          -e DB_PASSWORD="${{ secrets.PROD_DB_PASSWORD }}" \
+          -e DB_DATABASE="lopenling" \
+          -e SMTP_HOST="smtp.eu.mailgun.org" \
+          -e SMTP_PORT="465" \
+          -e SMTP_USERNAME="application-backend@mg.lopenling.com" \
+          -e SMTP_PASSWORD="${{ secrets.PROD_SMTP_PORT }}" \
+          --network=host \
+          ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
