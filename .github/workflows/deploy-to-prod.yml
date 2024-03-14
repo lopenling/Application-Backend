@@ -55,7 +55,7 @@ jobs:
           envs: REGISTRY_USER,REGISTRY_PASSWORD,DOCKER_REGISTRY,RELEASE_TAG,APP_KEY,DB_PASSWORD,SMTP_PASSWORD
           script_stop: true
           script: |
-            echo "This is test"
+            echo $DOCKER_REGISTRY:$RELEASE_TAG
             docker login $DOCKER_REGISTRY --username $REGISTRY_USER --password $REGISTRY_PASSWORD
             docker pull $DOCKER_REGISTRY:$RELEASE_TAG
             docker stop application-backend || true
