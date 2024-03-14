@@ -33,33 +33,42 @@ jobs:
         docker push ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
 
   deploy_containers:
-    runs-on: [self-hosted, lopenling]
+    runs-on: ubuntu-latest
     needs: build-and-push-image
-    steps:
-    # Login to container registry
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
+    # Pull and start new containers on production
+    - name: Deploy to production
+      uses: appleboy/ssh-action@master
+      env:
+        REGISTRY_USER: ${{ github.actor }}
+        REGISTRY_PASSWORD: ${{ github.token }}
+        DOCKER_REGISTRY: ${{ env.DOCKER_REGISTRY }}
+        RELEASE_TAG: ${{ env.RELEASE_TAG }}
+        APP_KEY: ${{ secrets.PROD_APP_KEY }}
+        DB_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+        SMTP_PASSWORD: ${{ secrets.PROD_SMTP_PORT }}
       with:
-        registry: ${{ env.DOCKER_REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ github.token }}
-
-    # Deploy it!
-    - name: Deploy to Prod
-      run: |
-        docker pull ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
-        docker stop application-backend || true
-        docker rm application-backend  || true
-        docker run -d --name application-backend --restart always \
-          -e APP_KEY="${{ secrets.PROD_APP_KEY }}" \
-          -e DB_HOST="127.0.0.1" \
-          -e DB_PORT="5432" \
-          -e DB_USER="lopenling" \
-          -e DB_PASSWORD="${{ secrets.PROD_DB_PASSWORD }}" \
-          -e DB_DATABASE="lopenling" \
-          -e SMTP_HOST="smtp.eu.mailgun.org" \
-          -e SMTP_PORT="465" \
-          -e SMTP_USERNAME="application-backend@mg.lopenling.com" \
-          -e SMTP_PASSWORD="${{ secrets.PROD_SMTP_PORT }}" \
-          --network=host \
-          ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
+        host: 213.199.45.162
+        username: deployer
+        command_timeout: 5m
+        key: ${{ secrets.PROD_DEPLOYER_KEY }}
+        envs: REGISTRY_USER,REGISTRY_PASSWORD,DOCKER_REGISTRY,RELEASE_TAG,APP_KEY,DB_PASSWORD,SMTP_PASSWORD
+        script_stop: true
+        script: |
+          echo "This is test"
+          docker login $DOCKER_REGISTRY --username $REGISTRY_USER --password $REGISTRY_PASSWORD
+          docker pull $DOCKER_REGISTRY:$RELEASE_TAG
+          docker stop application-backend || true
+          docker rm application-backend  || true
+          docker run -d --name application-backend --restart always \
+            -e APP_KEY="$PROD_APP_KEY" \
+            -e DB_HOST="127.0.0.1" \
+            -e DB_PORT="5432" \
+            -e DB_USER="lopenling" \
+            -e DB_PASSWORD="$DB_PASSWORD" \
+            -e DB_DATABASE="lopenling" \
+            -e SMTP_HOST="smtp.eu.mailgun.org" \
+            -e SMTP_PORT="465" \
+            -e SMTP_USERNAME="application-backend@mg.lopenling.com" \
+            -e SMTP_PASSWORD="$SMTP_PASSWORD" \
+            --network=host \
+            ${{ env.DOCKER_REGISTRY }}:${{ env.RELEASE_TAG }}
