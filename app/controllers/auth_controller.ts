@@ -21,7 +21,7 @@ export default class AuthController {
       },
       {
         email: validated.email,
-        avatar: ''
+        avatar: '',
       }
     )
 
