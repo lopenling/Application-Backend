@@ -48,7 +48,8 @@ export default class AuthController {
     })
 
     // Add token to link, which will be emailed
-    const link = `http://localhost:3001/login/token?token=${token.token}`
+    // @TODO: Make this dynamic
+    const link = `https://my.lopenling.com/login/token?token=${token.token}`
 
     // Send email
     await mail.send((message) => {
