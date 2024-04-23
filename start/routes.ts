@@ -18,6 +18,16 @@ router
     router.post('auth/set_password', [AuthController, 'setPassword'])
     router.post('auth/login', [AuthController, 'login'])
     router.post('auth/logout', [AuthController, 'logout'])
+
+    // Social auth
+    router
+      .get('auth/:provider/redirect', ({ ally, params }) => {
+        return ally.use(params.provider).redirect()
+      })
+      .where('provider', /facebook|google/)
+    router
+      .get('auth/:provider/callback', [AuthController, 'socialCallback'])
+      .where('provider', /facebook|google/)
   })
   .prefix('v1')
 

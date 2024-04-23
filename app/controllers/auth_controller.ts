@@ -129,6 +129,47 @@ export default class AuthController {
     return user
   }
 
+  /**
+   * Handle callbacks from social providers
+   */
+  async socialCallback({ ally, params }: HttpContext) {
+    const driverInstance = ally.use(params.provider)
+    /**
+     * User has denied access by canceling
+     * the login flow
+     */
+    if (driverInstance.accessDenied()) {
+      return 'You have cancelled the login process'
+    }
+
+    /**
+     * OAuth state verification failed. This happens when the
+     * CSRF cookie gets expired.
+     */
+    if (driverInstance.stateMisMatch()) {
+      return 'We are unable to verify the request. Please try again'
+    }
+
+    /**
+     * Auth provider responded with some error
+     */
+    if (driverInstance.hasError()) {
+      return driverInstance.getError()
+    }
+
+    /**
+     * Access user info
+     */
+    const user = await driverInstance.user()
+
+    return User.firstOrCreate({
+      email: user.email,
+      avatar: user.avatarUrl,
+      firstName: user.original?.given_name,
+      lastName: user.original?.family_name,
+    })
+  }
+
   async logout({ auth }: HttpContext) {
     return auth.use('web').logout()
   }
