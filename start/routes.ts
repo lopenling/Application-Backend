@@ -11,6 +11,7 @@ const AuthController = () => import('#controllers/auth_controller')
 const UsersController = () => import('#controllers/users_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const TeamsController = () => import('#controllers/teams_controller')
 
 // Public routes
 router
@@ -39,6 +40,11 @@ router
 // Private routes
 router
   .group(() => {
+    // Teams
+    router.get('/teams', [TeamsController, 'index'])
+    router.post('/teams', [TeamsController, 'store'])
+
+    // Auth
     router.get('/me', [UsersController, 'me'])
     router.post('/auth/logout', [AuthController, 'logout'])
   })

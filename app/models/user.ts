@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { withAuthFinder } from '@adonisjs/auth'
+import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import UserToken from './user_token.js'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+import Team from './team.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -41,4 +42,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => UserToken)
   declare userTokens: HasMany<typeof UserToken>
+
+  @manyToMany(() => Team, {
+    pivotColumns: ['role'],
+    pivotTimestamps: true,
+  })
+  declare teams: ManyToMany<typeof Team>
 }
