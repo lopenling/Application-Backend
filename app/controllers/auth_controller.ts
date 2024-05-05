@@ -132,8 +132,11 @@ export default class AuthController {
   /**
    * Handle callbacks from social providers
    */
-  async socialCallback({ ally, params }: HttpContext) {
+  async socialCallback({ ally, params, request, response, auth }: HttpContext) {
     const driverInstance = ally.use(params.provider)
+    const authenticatingUrl = request.cookie('authenticating_url')
+    response.clearCookie('authenticating_url')
+
     /**
      * User has denied access by canceling
      * the login flow
@@ -162,12 +165,25 @@ export default class AuthController {
      */
     const user = await driverInstance.user()
 
-    return User.firstOrCreate({
+    /**
+     * Store user to local DB
+     */
+    const localUser = await User.firstOrCreate({
       email: user.email,
       avatar: user.avatarUrl,
       firstName: user.original?.given_name,
       lastName: user.original?.family_name,
     })
+
+    /**
+     * Login user
+     */
+    await auth.use('web').login(localUser)
+
+    /**
+     * Redirect user to frontend redirect URL
+     */
+    return response.redirect(`${authenticatingUrl}login/callback`)
   }
 
   async logout({ auth }: HttpContext) {
