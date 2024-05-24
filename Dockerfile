@@ -1,4 +1,4 @@
-FROM node:21-alpine as builder
+FROM node:20-alpine as builder
 
 # Set directory for all files
 WORKDIR /home/node/app
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Build final runtime container
-FROM node:21-alpine
+FROM node:20-alpine
 # Setup env with defaults
 ENV NODE_ENV=production
 ENV SESSION_DRIVER=cookie
