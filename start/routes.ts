@@ -11,6 +11,7 @@ const AuthController = () => import('#controllers/auth_controller')
 const UsersController = () => import('#controllers/users_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const DictionariesController = () => import('#controllers/dictionaries_controller')
 const TeamsController = () => import('#controllers/teams_controller')
 
 // Public routes
@@ -43,6 +44,13 @@ router
     // Teams
     router.get('/teams', [TeamsController, 'index'])
     router.post('/teams', [TeamsController, 'store'])
+
+    // Dictionary
+    router.get('/dictionaries', [DictionariesController, 'index'])
+    router.post('/dictionaries', [DictionariesController, 'store'])
+    router.get('/dictionaries/:id', [DictionariesController, 'show'])
+    router.patch('/dictionaries/:id', [DictionariesController, 'update'])
+    router.delete('/dictionaries/:id', [DictionariesController, 'destroy'])
 
     // Auth
     router.get('/me', [UsersController, 'me'])
