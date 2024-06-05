@@ -6,7 +6,8 @@ import vine from '@vinejs/vine'
  */
 export const createDictionaryValidator = vine.compile(
   vine.object({
-    name: vine.string()
+    name: vine.string(),
+    dictionary: vine.file({extnames: ['csv'], size: '2gb'})
   })
 )
 
