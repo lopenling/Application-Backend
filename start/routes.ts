@@ -35,6 +35,8 @@ router
     router
       .get('/auth/:provider/callback', [AuthController, 'socialCallback'])
       .where('provider', /facebook|google/)
+
+    router.post('/auth/logout', [AuthController, 'logout'])
   })
   .prefix('v1')
 
@@ -54,7 +56,6 @@ router
 
     // Auth
     router.get('/me', [UsersController, 'me'])
-    router.post('/auth/logout', [AuthController, 'logout'])
   })
   .prefix('v1')
   .use(middleware.auth())
