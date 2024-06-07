@@ -1,3 +1,5 @@
+import Term from '#models/term'
+import { termSearchValidator } from '#validators/term'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TermsController {
@@ -14,7 +16,21 @@ export default class TermsController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
+  async search({ request }: HttpContext) {
+    const validated = await request.validateUsing(termSearchValidator)
+
+    // Search by term
+    if (validated.term) {
+      return Term.query()
+        .whereIn('dictionary_id', validated.dictionaries)
+        .whereLike('term', `%${validated.term}%`)
+    }
+
+    // Search by description
+    return Term.query()
+      .whereIn('dictionary_id', validated.dictionaries)
+      .whereLike('description', `%${validated.description}%`)
+  }
 
   /**
    * Handle form submission for the edit action
