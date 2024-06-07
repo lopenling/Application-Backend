@@ -8,6 +8,7 @@ export const termSearchValidator = vine.compile(
   vine.object({
     term: vine.string().optional().requiredIfMissing('description'),
     description: vine.string().optional().requiredIfMissing('term'),
-    dictionaries: vine.array(vine.number())
+    dictionaries: vine.array(vine.number()),
+    matching: vine.enum(['exact', 'partial'])
   })
 )

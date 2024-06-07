@@ -21,17 +21,29 @@ export default class TermsController {
   async search({ request }: HttpContext) {
     const validated = await request.validateUsing(termSearchValidator)
 
+    console.log(wylie.fromWylie(validated.term));
+
+    let query = Term.query()
+    .whereIn('dictionary_id', validated.dictionaries)
+
     // Search by term
     if (validated.term) {
-      return Term.query()
-        .whereIn('dictionary_id', validated.dictionaries)
-        .whereLike('term', `%${wylie.fromWylie(validated.term)}%`)
+      if (validated.matching === 'exact') {
+        query.where('term', wylie.fromWylie(validated.term))
+      } else {
+        query.whereLike('term', `%${wylie.fromWylie(validated.term)}%`)
+      }
+
+      return query
     }
 
-    // Search by description
-    return Term.query()
-      .whereIn('dictionary_id', validated.dictionaries)
-      .whereLike('description', `%${validated.description}%`)
+    if (validated.matching === 'exact') {
+      query.where('description', wylie.fromWylie(validated.description))
+    } else {
+      query.whereLike('description', `%${wylie.fromWylie(validated.description)}%`)
+    }
+
+    return query
   }
 
   /**
