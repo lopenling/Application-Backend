@@ -1,6 +1,8 @@
 import Term from '#models/term'
 import { termSearchValidator } from '#validators/term'
 import type { HttpContext } from '@adonisjs/core/http'
+import { wylie } from 'tibetan'
+
 
 export default class TermsController {
   /**
@@ -23,7 +25,7 @@ export default class TermsController {
     if (validated.term) {
       return Term.query()
         .whereIn('dictionary_id', validated.dictionaries)
-        .whereLike('term', `%${validated.term}%`)
+        .whereLike('term', `%${wylie.fromWylie(validated.term)}%`)
     }
 
     // Search by description
