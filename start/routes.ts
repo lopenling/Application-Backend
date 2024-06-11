@@ -11,6 +11,8 @@ const AuthController = () => import('#controllers/auth_controller')
 const UsersController = () => import('#controllers/users_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import TermsController from '#controllers/terms_controller'
+const DictionariesController = () => import('#controllers/dictionaries_controller')
 const TeamsController = () => import('#controllers/teams_controller')
 
 // Public routes
@@ -34,6 +36,8 @@ router
     router
       .get('/auth/:provider/callback', [AuthController, 'socialCallback'])
       .where('provider', /facebook|google/)
+
+    router.post('/auth/logout', [AuthController, 'logout'])
   })
   .prefix('v1')
 
@@ -44,9 +48,19 @@ router
     router.get('/teams', [TeamsController, 'index'])
     router.post('/teams', [TeamsController, 'store'])
 
+    // Dictionary
+    router.get('/dictionaries', [DictionariesController, 'index'])
+    router.post('/dictionaries', [DictionariesController, 'store'])
+    router.get('/dictionaries/:id', [DictionariesController, 'show'])
+    router.patch('/dictionaries/:id', [DictionariesController, 'update'])
+    router.delete('/dictionaries/:id', [DictionariesController, 'destroy'])
+
+    // Terms
+    router.post('/terms/search', [TermsController, 'search'])
+
+
     // Auth
     router.get('/me', [UsersController, 'me'])
-    router.post('/auth/logout', [AuthController, 'logout'])
   })
   .prefix('v1')
   .use(middleware.auth())

@@ -62,7 +62,8 @@
     "edge.js": "^6.0.1",
     "luxon": "^3.4.4",
     "pg": "^8.11.3",
-    "reflect-metadata": "^0.2.1"
+    "reflect-metadata": "^0.2.1",
+    "tibetan": "^1.5.2"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"
