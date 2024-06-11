@@ -21,8 +21,6 @@ export default class TermsController {
   async search({ request }: HttpContext) {
     const validated = await request.validateUsing(termSearchValidator)
 
-    console.log(wylie.fromWylie(validated.term));
-
     let query = Term.query()
     .whereIn('dictionary_id', validated.dictionaries)
 
