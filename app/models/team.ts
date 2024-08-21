@@ -19,7 +19,7 @@ export default class Team extends BaseModel {
   declare name: string
 
   @manyToMany(() => User, {
-    pivotColumns: ['role'],
+    pivotColumns: ['role', 'dictionaries'],
     pivotTimestamps: true,
   })
   declare users: ManyToMany<typeof User>
