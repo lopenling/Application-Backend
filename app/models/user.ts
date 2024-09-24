@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, computed, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import UserToken from './user_token.js'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Team from './team.js'
@@ -21,6 +21,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare lastName: string | null
+
+  @computed()
+  get fullName() {
+    return [this.firstName, this.lastName].filter(Boolean).join(' ')
+  }
 
   @column()
   declare avatar: string | null
