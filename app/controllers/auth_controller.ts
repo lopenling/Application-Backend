@@ -110,7 +110,7 @@ export default class AuthController {
     user.defaultLoginMethod = 'password'
     user.save()
 
-    auth.use('web').login(user)
+    await auth.use('web').login(user)
 
     return user
   }
