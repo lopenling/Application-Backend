@@ -32,14 +32,12 @@ export default class TeamsController {
    */
   async show({ auth, params }: HttpContext) {
 
-    const team = await auth.user!.related('teams').query()
+    return auth.user!.related('teams').query()
       .where('id', params.id)
       .preload('users', (query) => {
         query.pivotColumns(['role'])
       })
       .firstOrFail()
-
-    return team
   }
 
 
