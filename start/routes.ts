@@ -51,17 +51,6 @@ router
     router.post('/teams/:id/leave', [TeamsController, 'leave'])
     router.patch('/teams/:id', [TeamsController, 'patch'])
 
-    // Dictionary
-    router.get('/dictionaries', [DictionariesController, 'index'])
-    router.post('/dictionaries', [DictionariesController, 'store'])
-    router.get('/dictionaries/:id', [DictionariesController, 'show'])
-    router.patch('/dictionaries/:id', [DictionariesController, 'update'])
-    router.delete('/dictionaries/:id', [DictionariesController, 'destroy'])
-
-    // Terms
-    router.post('/terms/search', [TermsController, 'search'])
-
-
     // Auth
     router.get('/me', [UsersController, 'me'])
   })
