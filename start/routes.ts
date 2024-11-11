@@ -11,8 +11,6 @@ const AuthController = () => import('#controllers/auth_controller')
 const UsersController = () => import('#controllers/users_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import TermsController from '#controllers/terms_controller'
-const DictionariesController = () => import('#controllers/dictionaries_controller')
 const TeamsController = () => import('#controllers/teams_controller')
 
 // Public routes
