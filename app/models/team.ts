@@ -5,7 +5,7 @@ import { DateTime } from 'luxon'
 
 export default class Team extends BaseModel {
   /**
-   * Serialize role from pivot table
+   * Serialize only specific fields from pivot table
    */
   serializeExtras() {
     return {
@@ -20,7 +20,7 @@ export default class Team extends BaseModel {
   declare name: string
 
   @manyToMany(() => User, {
-    pivotColumns: ['role', 'dictionaries'],
+    pivotColumns: ['role'],
     pivotTimestamps: true,
   })
   declare users: ManyToMany<typeof User>

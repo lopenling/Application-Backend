@@ -13,6 +13,15 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
+  /**
+   * Serialize only specific fields from pivot table
+   */
+  serializeExtras() {
+    return {
+      role: this.$extras.pivot_role,
+    }
+  }
+
   @column({ isPrimary: true })
   declare id: number
 
