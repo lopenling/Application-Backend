@@ -47,7 +47,9 @@ router
     // Teams
     router.get('/teams', [TeamsController, 'index'])
     router.post('/teams', [TeamsController, 'store'])
+    router.get('/teams/:id', [TeamsController, 'show'])
     router.post('/teams/:id/leave', [TeamsController, 'leave'])
+    router.patch('/teams/:id', [TeamsController, 'patch'])
 
     // Dictionary
     router.get('/dictionaries', [DictionariesController, 'index'])
