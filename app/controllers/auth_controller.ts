@@ -110,7 +110,7 @@ export default class AuthController {
     user.defaultLoginMethod = 'password'
     user.save()
 
-    auth.use('web').login(user)
+    await auth.use('web').login(user)
 
     return user
   }
@@ -169,11 +169,20 @@ export default class AuthController {
      * Store user to local DB
      */
     const localUser = await User.firstOrCreate({
+      email: user.email
+    }, {
       email: user.email,
       avatar: user.avatarUrl,
       firstName: user.original?.given_name,
       lastName: user.original?.family_name,
     })
+
+    // In case user has been updated in any Social auths, then let's update it in our DB too
+    await localUser.merge({
+      avatar: user.avatarUrl,
+      firstName: user.original?.given_name,
+      lastName: user.original?.family_name,
+    }).save()
 
     /**
      * Login user

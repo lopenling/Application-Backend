@@ -1,10 +1,11 @@
 import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
 import User from './user.js'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
 
 export default class Team extends BaseModel {
   /**
-   * Serialize role from pivot table
+   * Serialize only specific fields from pivot table
    */
   serializeExtras() {
     return {
@@ -23,4 +24,10 @@ export default class Team extends BaseModel {
     pivotTimestamps: true,
   })
   declare users: ManyToMany<typeof User>
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
 }

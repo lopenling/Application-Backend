@@ -34,6 +34,8 @@ router
     router
       .get('/auth/:provider/callback', [AuthController, 'socialCallback'])
       .where('provider', /facebook|google/)
+
+    router.post('/auth/logout', [AuthController, 'logout'])
   })
   .prefix('v1')
 
@@ -43,10 +45,12 @@ router
     // Teams
     router.get('/teams', [TeamsController, 'index'])
     router.post('/teams', [TeamsController, 'store'])
+    router.get('/teams/:id', [TeamsController, 'show'])
+    router.post('/teams/:id/leave', [TeamsController, 'leave'])
+    router.patch('/teams/:id', [TeamsController, 'patch'])
 
     // Auth
     router.get('/me', [UsersController, 'me'])
-    router.post('/auth/logout', [AuthController, 'logout'])
   })
   .prefix('v1')
   .use(middleware.auth())

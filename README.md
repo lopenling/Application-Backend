@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/lopenling"><img src="https://raw.githubusercontent.com/lopenling/Home/main/assets/Lopenling-Logo-Icon.png" alt="Lopen Ling" width="100"></a>
+  <a href="https://github.com/lopenling"><img src="https://avatars.githubusercontent.com/u/124766713" alt="Lopen Ling" width="100"></a>
   <br>
 </h1>
 
